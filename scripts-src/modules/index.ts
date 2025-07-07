@@ -1,1 +1,3 @@
-console.log("hello");
+import "../common/ui/Responsive";
+
+console.log("hi");

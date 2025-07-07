@@ -31,16 +31,16 @@ module.exports = {
     entry: ENTRY,
     module: {
         rules: [
-            { test: /\.ts$/, use: 'ts-loader', include: [path.resolve(__dirname, 'src')] },
+            { test: /\.ts$/, use: 'ts-loader', include: [path.resolve(__dirname, 'scripts-src')] },
         ]
     },
     cache: {
         type: 'filesystem'
-      },
+    },
     output: {
         filename: (pathData, assetInfo) => {
             const fullPath = pathData.chunk.name;
-            return `${fullPath.substring(fullPath.lastIndexOf('/')+1)}.js`;
+            return `${fullPath.substring(fullPath.lastIndexOf('/') + 1)}.js`;
         },
         path: path.join(FRONTEND_ROOT, "scripts"),
         publicPath: "/scripts/"

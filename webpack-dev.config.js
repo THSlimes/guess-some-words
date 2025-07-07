@@ -34,7 +34,7 @@ const out = {
     entry: ENTRY,
     module: {
         rules: [
-            { test: /\.ts$/, use: 'ts-loader', include: [path.join(FRONTEND_ROOT, 'src')] },
+            { test: /\.ts$/, use: 'ts-loader', include: [path.join(FRONTEND_ROOT, 'scripts-src')] },
         ]
     },
     cache: {
