@@ -1,0 +1,30 @@
+{
+  "name": "guess-some-words",
+  "version": "0.0.0",
+  "description": "A customizable word-guessing game",
+  "homepage": "https://github.com/THSlimes/guess-some-words#readme",
+  "bugs": {
+    "url": "https://github.com/THSlimes/guess-some-words/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/THSlimes/guess-some-words.git"
+  },
+  "license": "MIT",
+  "author": "THSlimes",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "del-cli --force ./scripts && webpack --config ./webpack-prod.config.js && sass styles-src:styles --style compressed",
+    "dev": "webpack-dev-server --config webpack-dev.config.js"
+  },
+  "dependencies": {
+    "del-cli": "^6.0.0",
+    "sass": "^1.89.2",
+    "ts-loader": "^9.5.2",
+    "webpack": "^5.99.9",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.2"
+  }
+}
