@@ -1,0 +1,15 @@
+{
+    "name": "Example Gamemode",
+    "wordPicker": {
+        "name": "join",
+        "lhs": "a",
+        "rhs": {
+            "name": "pick",
+            "arg": [
+                "b",
+                "c",
+                "d"
+            ]
+        }
+    }
+}

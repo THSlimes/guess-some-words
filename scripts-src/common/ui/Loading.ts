@@ -1,4 +1,4 @@
-import { Class } from "../../util/UtilTypes";
+import { Class } from "../util/UtilTypes";
 
 namespace Loading {
 
