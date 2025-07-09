@@ -1,5 +1,6 @@
 {
-    "name": "Example Gamemode",
+    "title": "Example Gamemode",
+    "description": "This is an example gamemode.",
     "wordPicker": {
         "name": "join",
         "lhs": "a",

@@ -7,6 +7,13 @@ export const ALL_NULLARY_PROVIDERS: Record<string, NullaryProvider<any>> = {
     "random number": new NullaryProvider(NUMBER, Math.random),
     "random boolean": new NullaryProvider(BOOLEAN, () => Math.random() <= .5),
     timestamp: new NullaryProvider(NUMBER, Date.now),
+    year: new NullaryProvider(NUMBER, () => new Date().getFullYear()),
+    month: new NullaryProvider(NUMBER, () => new Date().getMonth() + 1),
+    day: new NullaryProvider(NUMBER, () => new Date().getDate()),
+    hours: new NullaryProvider(NUMBER, () => new Date().getHours()),
+    minutes: new NullaryProvider(NUMBER, () => new Date().getMinutes()),
+    seconds: new NullaryProvider(NUMBER, () => new Date().getSeconds()),
+    milliseconds: new NullaryProvider(NUMBER, () => new Date().getMilliseconds()),
 };
 
 export const ALL_UNARY_PROVIDERS: Record<string, UnaryProviderCollection<any>> = {
@@ -61,8 +68,8 @@ export const ALL_UNARY_PROVIDERS: Record<string, UnaryProviderCollection<any>> =
         "exp10",
         new UnaryProvider(NUMBER, NUMBER, x => 10 ** x),
     ),
-    ln: new UnaryProviderCollection(
-        "ln",
+    log: new UnaryProviderCollection(
+        "log",
         new UnaryProvider(NUMBER, NUMBER, Math.log),
     ),
     log2: new UnaryProviderCollection(
@@ -224,7 +231,7 @@ export const ALL_BINARY_PROVIDERS: Record<string, BinaryProviderCollection<any>>
     // math operations
     add: new BinaryProviderCollection(
         "add",
-        new BinaryProvider(STRING, STRING, STRING, (s1, s2) => s1 + s2, true),
+        new BinaryProvider(STRING, STRING, STRING, (s1, s2) => s1 + s2, false),
         new BinaryProvider(NUMBER, NUMBER, NUMBER, (x, y) => x + y, true),
         new BinaryProvider(BOOLEAN, BOOLEAN, BOOLEAN, (b1, b2) => b1 || b2, true),
         new BinaryProvider(BOOLEAN, NUMBER, NUMBER, (b, x) => b ? 0 : x, true),
@@ -237,11 +244,11 @@ export const ALL_BINARY_PROVIDERS: Record<string, BinaryProviderCollection<any>>
     ),
     mul: new BinaryProviderCollection(
         "mul",
-        new BinaryProvider(STRING, NUMBER, STRING, (s, x) => s.repeat(Math.floor(x)) + s.substring(0, Math.round(x % 1 * s.length)), true),
         new BinaryProvider(NUMBER, NUMBER, NUMBER, (x, y) => x * y, true),
         new BinaryProvider(BOOLEAN, BOOLEAN, BOOLEAN, (b1, b2) => b1 && b2, true),
         new BinaryProvider(BOOLEAN, NUMBER, NUMBER, (b, x) => b ? x : 0, true),
         new BinaryProvider(BOOLEAN, STRING, STRING, (b, s) => b ? s : "", true),
+        new BinaryProvider(STRING, NUMBER, STRING, (s, x) => s.repeat(Math.floor(x)) + s.substring(0, Math.round(x % 1 * s.length)), true),
     ),
     div: new BinaryProviderCollection(
         "div",

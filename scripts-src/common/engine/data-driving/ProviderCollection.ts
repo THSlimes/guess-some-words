@@ -35,7 +35,17 @@ export class BinaryProviderCollection<M extends BinaryProvider<any, any, any>[]>
 
     public findImpl<LHS, RHS>(lhsType: Type<LHS>, rhsType: Type<RHS>): Extract<M[number], BinaryProvider<LHS, RHS, any>> {
         for (const p of this.providers) {
-            if (lhsType.extends(p.lhsType) && rhsType.extends(p.rhsType)) return p as Extract<M[number], BinaryProvider<LHS, RHS, any>>;
+            if (lhsType.extends(p.lhsType) && rhsType.extends(p.rhsType)) {
+                return p as Extract<M[number], BinaryProvider<LHS, RHS, any>>;
+            }
+            else if (p.isCommutative && lhsType.extends(p.rhsType) && rhsType.extends(p.lhsType)) {
+                return new BinaryProvider(
+                    p.rhsType,
+                    p.lhsType,
+                    p.returnType,
+                    (rhs, lhs) => p.apply(lhs, rhs)
+                ) as Extract<M[number], BinaryProvider<LHS, RHS, any>>;
+            }
         }
 
         throw new TypeError(`no ${this.name} implementation found for (${lhsType.name}, ${rhsType.name}) argument types`);
