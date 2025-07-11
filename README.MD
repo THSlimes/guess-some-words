@@ -244,14 +244,20 @@ Some binary providers are _commutative_, meaning that their result will be the s
 
 #### Random Operations
 
-| Name                | Description                                                                                       | LHS Type  | RHS Type | Return Type | Commutative |
-| ------------------- | ------------------------------------------------------------------------------------------------- | --------- | -------- | ----------- | ----------- |
-| `"pick n"`          | Picks `rhs` items from the `lhs` list <br> _Throws an error if the LHS is empty_                  | string[]  | number   | string[]    | ❌           |
-| `"pick n"`          | Picks `rhs` items from the `lhs` list <br> _Throws an error if the LHS is empty_                  | number[]  | number   | number[]    | ❌           |
-| `"pick n"`          | Picks `rhs` items from the `lhs` list <br> _Throws an error if the LHS is empty_                  | boolean[] | number   | boolean[]   | ❌           |
-| `"pick n returned"` | Picks `rhs` items from the `lhs` list, with duplicates <br> _Throws an error if the LHS is empty_ | string[]  | number   | string[]    | ❌           |
-| `"pick n returned"` | Picks `rhs` items from the `lhs` list, with duplicates <br> _Throws an error if the LHS is empty_ | number[]  | number   | number[]    | ❌           |
-| `"pick n returned"` | Picks `rhs` items from the `lhs` list, with duplicates <br> _Throws an error if the LHS is empty_ | boolean[] | number   | boolean[]   | ❌           |
+| Name                | Description                                                                                       | LHS Type    | RHS Type | Return Type | Commutative |
+| ------------------- | ------------------------------------------------------------------------------------------------- | ----------- | -------- | ----------- | ----------- |
+| `"pick n"`          | Picks `rhs` items from the `lhs` list <br> _Throws an error if the LHS is empty_                  | string[]    | number   | string[]    | ❌           |
+| `"pick n"`          | Picks `rhs` items from the `lhs` list <br> _Throws an error if the LHS is empty_                  | number[]    | number   | number[]    | ❌           |
+| `"pick n"`          | Picks `rhs` items from the `lhs` list <br> _Throws an error if the LHS is empty_                  | boolean[]   | number   | boolean[]   | ❌           |
+| `"pick n"`          | Picks `rhs` items from the `lhs` list <br> _Throws an error if the LHS is empty_                  | string[][]  | number   | string[][]  | ❌           |
+| `"pick n"`          | Picks `rhs` items from the `lhs` list <br> _Throws an error if the LHS is empty_                  | number[][]  | number   | number[][]  | ❌           |
+| `"pick n"`          | Picks `rhs` items from the `lhs` list <br> _Throws an error if the LHS is empty_                  | boolean[][] | number   | boolean[][] | ❌           |
+| `"pick n returned"` | Picks `rhs` items from the `lhs` list, with duplicates <br> _Throws an error if the LHS is empty_ | string[]    | number   | string[]    | ❌           |
+| `"pick n returned"` | Picks `rhs` items from the `lhs` list, with duplicates <br> _Throws an error if the LHS is empty_ | number[]    | number   | number[]    | ❌           |
+| `"pick n returned"` | Picks `rhs` items from the `lhs` list, with duplicates <br> _Throws an error if the LHS is empty_ | boolean[]   | number   | boolean[]   | ❌           |
+| `"pick n returned"` | Picks `rhs` items from the `lhs` list, with duplicates <br> _Throws an error if the LHS is empty_ | string[][]  | number   | string[][]  | ❌           |
+| `"pick n returned"` | Picks `rhs` items from the `lhs` list, with duplicates <br> _Throws an error if the LHS is empty_ | number[][]  | number   | number[][]  | ❌           |
+| `"pick n returned"` | Picks `rhs` items from the `lhs` list, with duplicates <br> _Throws an error if the LHS is empty_ | boolean[][] | number   | boolean[][] | ❌           |
  
 
 ### Ternary Providers

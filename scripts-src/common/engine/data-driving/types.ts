@@ -90,6 +90,13 @@ export const NUMBER_ARRAY = NUMBER.array();
 /** Type of an array of booleans */
 export const BOOLEAN_ARRAY = BOOLEAN.array();
 
+/** Type of a 2D array of strings */
+export const STRING_ARRAY_ARRAY = STRING_ARRAY.array();
+/** Type of a 2D array of numbers */
+export const NUMBER_ARRAY_ARRAY = NUMBER_ARRAY.array();
+/** Type of a 2D array of booleans */
+export const BOOLEAN_ARRAY_ARRAY = BOOLEAN_ARRAY.array();
+
 export type DDValue = PrimitiveTypeMap[Primitive] | DDValue[];
 export function isDDValue(v: unknown): v is DDValue {
     if (Array.isArray(v)) {

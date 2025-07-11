@@ -1,7 +1,7 @@
 import RandomUtil from "../../util/RandomUtil";
 import { BinaryProvider, NullaryProvider, TernaryProvider, UnaryProvider } from "./Provider";
 import { BinaryProviderCollection, TernaryProviderCollection, UnaryProviderCollection } from "./ProviderCollection";
-import { BOOLEAN, BOOLEAN_ARRAY, NUMBER, NUMBER_ARRAY, STRING, STRING_ARRAY } from "./types";
+import { BOOLEAN, BOOLEAN_ARRAY, BOOLEAN_ARRAY_ARRAY, NUMBER, NUMBER_ARRAY, NUMBER_ARRAY_ARRAY, STRING, STRING_ARRAY, STRING_ARRAY_ARRAY } from "./types";
 
 export const ALL_NULLARY_PROVIDERS: Record<string, NullaryProvider<any>> = {
     "random number": new NullaryProvider(NUMBER, Math.random),
@@ -417,6 +417,18 @@ export const ALL_BINARY_PROVIDERS: Record<string, BinaryProviderCollection<any>>
             if (ba.length === 0) throw new Error("cannot pick from empty array");
             return ba.toSorted(() => Math.random() - .5).slice(0, n);
         }),
+        new BinaryProvider(STRING_ARRAY_ARRAY, NUMBER, STRING_ARRAY_ARRAY, (sa, n) => {
+            if (sa.length === 0) throw new Error("cannot pick from empty array");
+            return sa.toSorted(() => Math.random() - .5).slice(0, n);
+        }),
+        new BinaryProvider(NUMBER_ARRAY_ARRAY, NUMBER, NUMBER_ARRAY_ARRAY, (xs, n) => {
+            if (xs.length === 0) throw new Error("cannot pick from empty array");
+            return xs.toSorted(() => Math.random() - .5).slice(0, n);
+        }),
+        new BinaryProvider(BOOLEAN_ARRAY_ARRAY, NUMBER, BOOLEAN_ARRAY_ARRAY, (ba, n) => {
+            if (ba.length === 0) throw new Error("cannot pick from empty array");
+            return ba.toSorted(() => Math.random() - .5).slice(0, n);
+        }),
     ),
     "pick n returned": new BinaryProviderCollection(
         "pick n returned",
@@ -440,6 +452,30 @@ export const ALL_BINARY_PROVIDERS: Record<string, BinaryProviderCollection<any>>
             if (ba.length === 0) throw new Error("cannot pick from empty array");
 
             const out: boolean[] = [];
+            for (let i = 0; i < n; i++) out.push(ba[(Math.floor(Math.random() * ba.length))]);
+
+            return out;
+        }),
+        new BinaryProvider(STRING_ARRAY_ARRAY, NUMBER, STRING_ARRAY_ARRAY, (sa, n) => {
+            if (sa.length === 0) throw new Error("cannot pick from empty array");
+
+            const out: string[][] = [];
+            for (let i = 0; i < n; i++) out.push(sa[(Math.floor(Math.random() * sa.length))]);
+
+            return out;
+        }),
+        new BinaryProvider(NUMBER_ARRAY_ARRAY, NUMBER, NUMBER_ARRAY_ARRAY, (xs, n) => {
+            if (xs.length === 0) throw new Error("cannot pick from empty array");
+
+            const out: number[][] = [];
+            for (let i = 0; i < n; i++) out.push(xs[(Math.floor(Math.random() * xs.length))]);
+
+            return out;
+        }),
+        new BinaryProvider(BOOLEAN_ARRAY_ARRAY, NUMBER, BOOLEAN_ARRAY_ARRAY, (ba, n) => {
+            if (ba.length === 0) throw new Error("cannot pick from empty array");
+
+            const out: boolean[][] = [];
             for (let i = 0; i < n; i++) out.push(ba[(Math.floor(Math.random() * ba.length))]);
 
             return out;
