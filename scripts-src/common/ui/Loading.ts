@@ -12,7 +12,7 @@ namespace Loading {
     export function onceDOMContentLoaded(): Promise<void> {
         if (isDOMContentLoaded) return Promise.resolve();
         else return new Promise(resolve => {
-            window.addEventListener("DOMContentLoaded", () => resolve());
+            window.addEventListener("DOMContentLoaded", () => resolve(), { once: true });
         });
     }
 

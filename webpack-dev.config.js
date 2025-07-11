@@ -68,10 +68,10 @@ module.exports = out;
 
 
 // setting up live sass compiler
-const stylesSrcPath = path.join(FRONTEND_ROOT, "styles-src");
-const stylesOutPath = path.join(FRONTEND_ROOT, "public/styles");
+const STYLES_SRC_PATH = path.join(FRONTEND_ROOT, "styles-src");
+const STYLES_OUT_PATH = path.join(FRONTEND_ROOT, "styles");
 
-const sassProcess = childProcess.exec(`sass "${stylesSrcPath}":"${stylesOutPath}" --style compressed --watch`);
+const sassProcess = childProcess.exec(`sass "${STYLES_SRC_PATH}":"${STYLES_OUT_PATH}" --style compressed --watch`);
 sassProcess.on("message", (code, signal) => {
     console.log(code);
 });
