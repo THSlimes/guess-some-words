@@ -1,6 +1,6 @@
 import RandomUtil from "../../util/RandomUtil";
-import { BinaryProvider, NullaryProvider, UnaryProvider } from "./Provider";
-import { BinaryProviderCollection, UnaryProviderCollection } from "./ProviderCollection";
+import { BinaryProvider, NullaryProvider, TernaryProvider, UnaryProvider } from "./Provider";
+import { BinaryProviderCollection, TernaryProviderCollection, UnaryProviderCollection } from "./ProviderCollection";
 import { BOOLEAN, BOOLEAN_ARRAY, NUMBER, NUMBER_ARRAY, STRING, STRING_ARRAY } from "./types";
 
 export const ALL_NULLARY_PROVIDERS: Record<string, NullaryProvider<any>> = {
@@ -20,12 +20,15 @@ export const ALL_UNARY_PROVIDERS: Record<string, UnaryProviderCollection<any>> =
     // basics
     negate: new UnaryProviderCollection(
         "negate",
-        new UnaryProvider(BOOLEAN, BOOLEAN, b => !b), // boolean negation
-        new UnaryProvider(NUMBER, NUMBER, x => -x), // numeric negation
+        new UnaryProvider(BOOLEAN, BOOLEAN, b => !b),
+        new UnaryProvider(NUMBER, NUMBER, x => -x),
     ),
     invert: new UnaryProviderCollection(
         "invert",
-        new UnaryProvider(NUMBER, NUMBER, x => 1 / x), // numeric inversion
+        new UnaryProvider(NUMBER, NUMBER, x => {
+            if (x === 0) throw new RangeError(`cannot take multiplicative inverse of ${x}`);
+            return 1 / x;
+        }),
     ),
     signum: new UnaryProviderCollection(
         "signum",
@@ -46,7 +49,10 @@ export const ALL_UNARY_PROVIDERS: Record<string, UnaryProviderCollection<any>> =
     ),
     sqrt: new UnaryProviderCollection(
         "square root",
-        new UnaryProvider(NUMBER, NUMBER, Math.sqrt),
+        new UnaryProvider(NUMBER, NUMBER, x => {
+            if (x < 0) throw new RangeError(`cannot take square root of ${x}`);
+            return Math.sqrt(x);
+        }),
     ),
     cube: new UnaryProviderCollection(
         "cube",
@@ -54,7 +60,10 @@ export const ALL_UNARY_PROVIDERS: Record<string, UnaryProviderCollection<any>> =
     ),
     "cube root": new UnaryProviderCollection(
         "cube root",
-        new UnaryProvider(NUMBER, NUMBER, Math.cbrt),
+        new UnaryProvider(NUMBER, NUMBER, x => {
+            if (x < 0) throw new RangeError(`cannot take cube root of ${x}`);
+            return Math.cbrt(x);
+        }),
     ),
     exp: new UnaryProviderCollection(
         "exp",
@@ -70,15 +79,24 @@ export const ALL_UNARY_PROVIDERS: Record<string, UnaryProviderCollection<any>> =
     ),
     log: new UnaryProviderCollection(
         "log",
-        new UnaryProvider(NUMBER, NUMBER, Math.log),
+        new UnaryProvider(NUMBER, NUMBER, x => {
+            if (x <= 0) throw new RangeError(`cannot take log of ${x}`);
+            return Math.log(x);
+        }),
     ),
     log2: new UnaryProviderCollection(
         "log2",
-        new UnaryProvider(NUMBER, NUMBER, Math.log2),
+        new UnaryProvider(NUMBER, NUMBER, x => {
+            if (x <= 0) throw new RangeError(`cannot take log2 of ${x}`);
+            return Math.log2(x);
+        }),
     ),
     log10: new UnaryProviderCollection(
         "log10",
-        new UnaryProvider(NUMBER, NUMBER, Math.log10),
+        new UnaryProvider(NUMBER, NUMBER, x => {
+            if (x <= 0) throw new RangeError(`cannot take log10 of ${x}`);
+            return Math.log10(x);
+        }),
     ),
 
     // rounding
@@ -124,6 +142,12 @@ export const ALL_UNARY_PROVIDERS: Record<string, UnaryProviderCollection<any>> =
         new UnaryProvider(BOOLEAN_ARRAY, BOOLEAN, RandomUtil.pick),
         new UnaryProvider(STRING_ARRAY, STRING, RandomUtil.pick),
     ),
+    shuffle: new UnaryProviderCollection(
+        "shuffle",
+        new UnaryProvider(STRING_ARRAY, STRING_ARRAY, sa => sa.toSorted(() => Math.random() - .5)),
+        new UnaryProvider(NUMBER_ARRAY, NUMBER_ARRAY, xs => xs.toSorted(() => Math.random() - .5)),
+        new UnaryProvider(BOOLEAN_ARRAY, BOOLEAN_ARRAY, ba => ba.toSorted(() => Math.random() - .5)),
+    ),
 
     // string manipulation
     lowercase: new UnaryProviderCollection(
@@ -159,17 +183,17 @@ export const ALL_UNARY_PROVIDERS: Record<string, UnaryProviderCollection<any>> =
     ),
 
     // list manipulation
+    list: new UnaryProviderCollection(
+        "list",
+        new UnaryProvider(STRING, STRING_ARRAY, s => [s]),
+        new UnaryProvider(NUMBER, NUMBER_ARRAY, x => [x]),
+        new UnaryProvider(BOOLEAN, BOOLEAN_ARRAY, b => [b]),
+    ),
     sort: new UnaryProviderCollection(
         "sort",
         new UnaryProvider(STRING_ARRAY, STRING_ARRAY, sa => sa.toSorted()),
         new UnaryProvider(NUMBER_ARRAY, NUMBER_ARRAY, xs => xs.toSorted((x1, x2) => x1 - x2)),
         new UnaryProvider(BOOLEAN_ARRAY, BOOLEAN_ARRAY, ba => ba.toSorted()),
-    ),
-    shuffle: new UnaryProviderCollection(
-        "shuffle",
-        new UnaryProvider(STRING_ARRAY, STRING_ARRAY, sa => sa.toSorted(() => Math.random() - .5)),
-        new UnaryProvider(NUMBER_ARRAY, NUMBER_ARRAY, xs => xs.toSorted(() => Math.random() - .5)),
-        new UnaryProvider(BOOLEAN_ARRAY, BOOLEAN_ARRAY, ba => ba.toSorted(() => Math.random() - .5)),
     ),
     head: new UnaryProviderCollection(
         "head",
@@ -304,7 +328,62 @@ export const ALL_BINARY_PROVIDERS: Record<string, BinaryProviderCollection<any>>
         new BinaryProvider(NUMBER, NUMBER, NUMBER, (x, y) => x ^ y, true),
     ),
 
+    // comparisons
+    "less than or equal": new BinaryProviderCollection(
+        "less than or equal",
+        new BinaryProvider(NUMBER, NUMBER, BOOLEAN, (x, y) => x <= y),
+        new BinaryProvider(STRING, STRING, BOOLEAN, (s1, s2) => s1.localeCompare(s2) <= 0),
+    ),
+    "less than": new BinaryProviderCollection(
+        "less than",
+        new BinaryProvider(NUMBER, NUMBER, BOOLEAN, (x, y) => x < y),
+        new BinaryProvider(STRING, STRING, BOOLEAN, (s1, s2) => s1.localeCompare(s2) < 0),
+    ),
+    equals: new BinaryProviderCollection(
+        "equals",
+        new BinaryProvider(NUMBER, NUMBER, BOOLEAN, (x, y) => x === y, true),
+        new BinaryProvider(STRING, STRING, BOOLEAN, (s1, s2) => s1.localeCompare(s2) === 0, true),
+        new BinaryProvider(BOOLEAN, BOOLEAN, BOOLEAN, (b1, b2) => b1 === b2, true),
+    ),
+    "not equals": new BinaryProviderCollection(
+        "not equals",
+        new BinaryProvider(NUMBER, NUMBER, BOOLEAN, (x, y) => x !== y, true),
+        new BinaryProvider(STRING, STRING, BOOLEAN, (s1, s2) => s1.localeCompare(s2) !== 0, true),
+        new BinaryProvider(BOOLEAN, BOOLEAN, BOOLEAN, (b1, b2) => b1 !== b2, true),
+    ),
+    "greater than": new BinaryProviderCollection(
+        "greater than",
+        new BinaryProvider(NUMBER, NUMBER, BOOLEAN, (x, y) => x > y),
+        new BinaryProvider(STRING, STRING, BOOLEAN, (s1, s2) => s1.localeCompare(s2) > 0),
+    ),
+    "greater than or equal": new BinaryProviderCollection(
+        "greater than or equal",
+        new BinaryProvider(NUMBER, NUMBER, BOOLEAN, (x, y) => x >= y),
+        new BinaryProvider(STRING, STRING, BOOLEAN, (s1, s2) => s1.localeCompare(s2) >= 0),
+    ),
+
     // array manipulation
+    index: new BinaryProviderCollection(
+        "index",
+        new BinaryProvider(STRING_ARRAY, NUMBER, STRING, (sa, x) => {
+            if (x % 1 !== 0) throw new Error(`RHS ${x} is not an integer`);
+            else if (x < 0 || x >= sa.length) throw new RangeError(`index ${x} is out of range for list of length ${sa.length}`);
+
+            return sa[x];
+        }),
+        new BinaryProvider(NUMBER_ARRAY, NUMBER, NUMBER, (xs, x) => {
+            if (x % 1 !== 0) throw new Error(`RHS ${x} is not an integer`);
+            else if (x < 0 || x >= xs.length) throw new RangeError(`index ${x} is out of range for list of length ${xs.length}`);
+
+            return xs[x];
+        }),
+        new BinaryProvider(BOOLEAN_ARRAY, NUMBER, BOOLEAN, (ba, x) => {
+            if (x % 1 !== 0) throw new Error(`RHS ${x} is not an integer`);
+            else if (x < 0 || x >= ba.length) throw new RangeError(`index ${x} is out of range for list of length ${ba.length}`);
+
+            return ba[x];
+        }),
+    ),
     join: new BinaryProviderCollection(
         "join",
         new BinaryProvider(STRING, STRING, STRING_ARRAY, (s1, s2) => [s1, s2]),
@@ -326,29 +405,56 @@ export const ALL_BINARY_PROVIDERS: Record<string, BinaryProviderCollection<any>>
     // randomness
     "pick n": new BinaryProviderCollection(
         "pick n",
-        new BinaryProvider(STRING_ARRAY, NUMBER, STRING_ARRAY, (sa, n) => sa.toSorted(() => Math.random() - .5).slice(0, n)),
-        new BinaryProvider(NUMBER_ARRAY, NUMBER, NUMBER_ARRAY, (xs, n) => xs.toSorted(() => Math.random() - .5).slice(0, n)),
-        new BinaryProvider(BOOLEAN_ARRAY, NUMBER, BOOLEAN_ARRAY, (ba, n) => ba.toSorted(() => Math.random() - .5).slice(0, n)),
+        new BinaryProvider(STRING_ARRAY, NUMBER, STRING_ARRAY, (sa, n) => {
+            if (sa.length === 0) throw new Error("cannot pick from empty array");
+            return sa.toSorted(() => Math.random() - .5).slice(0, n);
+        }),
+        new BinaryProvider(NUMBER_ARRAY, NUMBER, NUMBER_ARRAY, (xs, n) => {
+            if (xs.length === 0) throw new Error("cannot pick from empty array");
+            return xs.toSorted(() => Math.random() - .5).slice(0, n);
+        }),
+        new BinaryProvider(BOOLEAN_ARRAY, NUMBER, BOOLEAN_ARRAY, (ba, n) => {
+            if (ba.length === 0) throw new Error("cannot pick from empty array");
+            return ba.toSorted(() => Math.random() - .5).slice(0, n);
+        }),
     ),
     "pick n returned": new BinaryProviderCollection(
         "pick n returned",
         new BinaryProvider(STRING_ARRAY, NUMBER, STRING_ARRAY, (sa, n) => {
+            if (sa.length === 0) throw new Error("cannot pick from empty array");
+
             const out: string[] = [];
             for (let i = 0; i < n; i++) out.push(sa[(Math.floor(Math.random() * sa.length))]);
 
             return out;
         }),
         new BinaryProvider(NUMBER_ARRAY, NUMBER, NUMBER_ARRAY, (xs, n) => {
+            if (xs.length === 0) throw new Error("cannot pick from empty array");
+
             const out: number[] = [];
             for (let i = 0; i < n; i++) out.push(xs[(Math.floor(Math.random() * xs.length))]);
 
             return out;
         }),
         new BinaryProvider(BOOLEAN_ARRAY, NUMBER, BOOLEAN_ARRAY, (ba, n) => {
+            if (ba.length === 0) throw new Error("cannot pick from empty array");
+
             const out: boolean[] = [];
             for (let i = 0; i < n; i++) out.push(ba[(Math.floor(Math.random() * ba.length))]);
 
             return out;
         }),
     ),
+};
+
+export const ALL_TERNARY_PROVIDERS: Record<string, TernaryProviderCollection<any>> = {
+    conditional: new TernaryProviderCollection(
+        "conditional",
+        new TernaryProvider(BOOLEAN, STRING, STRING, STRING, (a, b, c) => a ? b : c),
+        new TernaryProvider(BOOLEAN, NUMBER, NUMBER, NUMBER, (a, b, c) => a ? b : c),
+        new TernaryProvider(BOOLEAN, BOOLEAN, BOOLEAN, BOOLEAN, (a, b, c) => a ? b : c),
+        new TernaryProvider(BOOLEAN, STRING_ARRAY, STRING_ARRAY, STRING_ARRAY, (a, b, c) => a ? b : c),
+        new TernaryProvider(BOOLEAN, NUMBER_ARRAY, NUMBER_ARRAY, NUMBER_ARRAY, (a, b, c) => a ? b : c),
+        new TernaryProvider(BOOLEAN, BOOLEAN_ARRAY, BOOLEAN_ARRAY, BOOLEAN_ARRAY, (a, b, c) => a ? b : c),
+    )
 };

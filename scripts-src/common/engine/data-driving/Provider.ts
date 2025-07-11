@@ -123,3 +123,33 @@ export class BinaryProvider<LHS, RHS, R> extends Provider<[LHS, RHS], R> {
     }
 
 }
+
+export class TernaryProvider<A, B, C, R> extends Provider<[A, B, C], R> {
+
+    public get aType() {
+        return this.argTypes[0];
+    }
+
+    public get bType() {
+        return this.argTypes[1];
+    }
+
+    public get cType() {
+        return this.argTypes[2];
+    }
+
+    public constructor(aType: Type<A>, bType: Type<B>, cType: Type<C>, returnType: Type<R>, impl: (a: A, b: B, c: C) => R) {
+        super([aType, bType, cType], returnType, impl);
+    }
+
+    public chain<N>(next: UnaryProvider<R, N>): TernaryProvider<A, B, C, N> {
+        return new TernaryProvider(
+            this.aType,
+            this.bType,
+            this.cType,
+            next.returnType,
+            (a: A, b: B, c: C) => next.apply(this.apply(a, b, c))
+        );
+    }
+
+}

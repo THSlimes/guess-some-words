@@ -1,5 +1,5 @@
-import { BinaryProvider, Provider, UnaryProvider } from "./Provider";
-import { BOOLEAN, NUMBER, STRING, Type, TypeOf } from "./types";
+import { BinaryProvider, TernaryProvider, UnaryProvider } from "./Provider";
+import { Type } from "./types";
 
 export class UnaryProviderCollection<M extends UnaryProvider<any, any>[]> {
 
@@ -51,5 +51,27 @@ export class BinaryProviderCollection<M extends BinaryProvider<any, any, any>[]>
         throw new TypeError(`no ${this.name} implementation found for (${lhsType.name}, ${rhsType.name}) argument types`);
     }
 
+}
+
+export class TernaryProviderCollection<M extends TernaryProvider<any, any, any, any>[]> {
+
+    public readonly name: string;
+    private readonly providers: M;
+
+    public constructor(name: string, ...providers: M) {
+        this.name = name;
+
+        this.providers = providers;
+    }
+
+    public findImpl<A, B, C>(aType: Type<A>, bType: Type<B>, cType: Type<C>): Extract<M[number], TernaryProvider<A, B, C, any>> {
+        for (const p of this.providers) {
+            if (aType.extends(p.aType) && bType.extends(p.bType) && cType.extends(p.cType)) {
+                return p as Extract<M[number], TernaryProvider<A, B, C, any>>;
+            }
+        }
+
+        throw new TypeError(`no ${this.name} implementation found for (${aType.name}, ${bType.name}, ${cType.name}) argument types`);
+    }
 
 }
