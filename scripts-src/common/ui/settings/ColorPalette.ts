@@ -64,7 +64,12 @@ namespace ColorPalette {
 
     // set on load
     const savedPalette = localStorage.getItem(LOCAL_STORAGE_KEY);
-    set(isPalette(savedPalette) ? savedPalette : DEFAULT_PALETTE);
+    if (isPalette(savedPalette)) set(savedPalette); // has saved palette
+    else { // no saved palette, use preference
+        if (matchMedia("(prefers-color-scheme: light)").matches) set(ColorPalette.DEFAULT_LIGHT);
+        else if (matchMedia("(prefers-color-scheme: dark)").matches) set(ColorPalette.DEFAULT_DARK);
+        else set(DEFAULT_PALETTE);
+    }
 
 }
 

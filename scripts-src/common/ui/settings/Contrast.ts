@@ -53,7 +53,11 @@ namespace Contrast {
 
     // set on load
     const savedContrast = localStorage.getItem(LOCAL_STORAGE_KEY);
-    set(isContrast(savedContrast) ? savedContrast : DEFAULT_CONTRAST);
+    if (isContrast(savedContrast)) set(savedContrast); // has saved contrast
+    else { // no saved contrast, use preference
+        if (matchMedia("(prefers-contrast: more)").matches) set(Contrast.HIGH);
+        else set(Contrast.NORMAL);
+    }
 
 }
 

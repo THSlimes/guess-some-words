@@ -53,7 +53,11 @@ namespace Motion {
 
     // set on load
     const savedMotion = localStorage.getItem(LOCAL_STORAGE_KEY);
-    set(isMotion(savedMotion) ? savedMotion : DEFAULT_MOTION);
+    if (isMotion(savedMotion)) set(savedMotion); // has saved motion setting
+    else { // no saved setting, use preference
+        if (matchMedia("(prefers-reduced-motion: reduce)").matches) set(Motion.REDUCED);
+        else set(Motion.NORMAL);
+    }
 
 }
 
