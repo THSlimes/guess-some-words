@@ -49,6 +49,16 @@ namespace Responsive {
 
     // hover
 
+    const HOVER_MEDIA_QUERY = matchMedia("(hover: hover)");
+
+    /**
+     * Checks whether the user can hover over parts of the page.
+     * @returns `true` if user can hover, `false` otherwise
+     */
+    export function canHover(): boolean {
+        return HOVER_MEDIA_QUERY.matches;
+    }
+
     type HoverChangeHandler = (canHover: boolean) => void;
     const hoverChangeHandlers: Set<HoverChangeHandler> = new Set();
     /** Attaches a callback function that is called when the hoverability changes. */
@@ -58,10 +68,8 @@ namespace Responsive {
 
     Loading.onceDOMContentLoaded()
         .then(() => {
-            const mq = matchMedia("(hover: hover)");
-
-            document.body.toggleAttribute("hover", mq.matches); // set initial value
-            mq.addEventListener("change", ev => { // set value on update
+            document.body.toggleAttribute("hover", HOVER_MEDIA_QUERY.matches); // set initial value
+            HOVER_MEDIA_QUERY.addEventListener("change", ev => { // set value on update
                 document.body.toggleAttribute("can-hover", ev.matches);
 
                 hoverChangeHandlers.forEach(h => h(ev.matches));
@@ -71,19 +79,27 @@ namespace Responsive {
     // pointer
 
     /** Accuracy of the main pointer device */
-    export enum Pointer {
+    export enum PointerAccuracy {
         NONE = "none",
         COARSE = "coarse",
         FINE = "fine"
     }
 
-    const POINTER_MEDIA_QUERIES: Record<Pointer, MediaQueryList> = {
-        [Pointer.NONE]: matchMedia("(pointer: none)"),
-        [Pointer.COARSE]: matchMedia("(pointer: coarse)"),
-        [Pointer.FINE]: matchMedia("(pointer: fine)")
+    const POINTER_MEDIA_QUERIES: Record<PointerAccuracy, MediaQueryList> = {
+        [PointerAccuracy.NONE]: matchMedia("(pointer: none)"),
+        [PointerAccuracy.COARSE]: matchMedia("(pointer: coarse)"),
+        [PointerAccuracy.FINE]: matchMedia("(pointer: fine)")
     }
 
-    type PointerChangeHandler = (vp: Pointer) => void;
+    /**
+     * Determines the current pointer accuracy.
+     * @returns current pointer accuracy
+     */
+    export function pointerAccuracy(): PointerAccuracy {
+        return Object.values(PointerAccuracy).find(pa => POINTER_MEDIA_QUERIES[pa].matches) ?? PointerAccuracy.NONE;
+    }
+
+    type PointerChangeHandler = (vp: PointerAccuracy) => void;
     const pointerChangeHandlers: Set<PointerChangeHandler> = new Set();
     /** Attaches a callback function that is called when the pointer accuracy changes. */
     export function onPointerChanged(handler: PointerChangeHandler) {
@@ -91,15 +107,15 @@ namespace Responsive {
     }
 
     Loading.onceDOMContentLoaded()
-        .then(() => Object.values(Pointer).forEach(p => {
-            const mq = POINTER_MEDIA_QUERIES[p];
+        .then(() => Object.values(PointerAccuracy).forEach(pa => {
+            const mq = POINTER_MEDIA_QUERIES[pa];
 
-            if (mq.matches) document.body.setAttribute("pointer", p); // sets initial value
+            if (mq.matches) document.body.setAttribute("pointer", pa); // sets initial value
 
             mq.addEventListener("change", ev => { // sets value on change
                 if (ev.matches) {
-                    document.body.setAttribute("pointer", p);
-                    pointerChangeHandlers.forEach(h => h(p));
+                    document.body.setAttribute("pointer", pa);
+                    pointerChangeHandlers.forEach(h => h(pa));
                 }
             });
         }));

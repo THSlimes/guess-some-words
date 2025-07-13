@@ -3,6 +3,13 @@ type AttrName = string | false | null;
 type AttrValue = string | null;
 type Child<Ctx> = string | Element | AssemblyLine<any, Ctx> | null | false;
 
+function childAsNode<Ctx>(child: Child<Ctx>, ctx: Ctx): Node | null {
+    if (typeof child === "string") return document.createTextNode(child);
+    else if (child instanceof Element) return child;
+    else if (child instanceof AssemblyLine) return child.apply(ctx);
+    else return null;
+}
+
 class AssemblyLine<E extends HTMLElement, Ctx> {
 
     private readonly mold: AssemblyLine.Mold<E, Ctx>;
@@ -26,7 +33,8 @@ class AssemblyLine<E extends HTMLElement, Ctx> {
      */
     public id(id: AssemblyLine.DynValue<string, E, Ctx>): AssemblyLine<E, Ctx> {
         return this.addStep((e, ctx) => {
-            e.id = AssemblyLine.DynValue.resolve(id, e, ctx);
+            AssemblyLine.DynValue.resolve(id, e, ctx)
+                .then(id => e.id = id);
 
             return { e, ctx };
         });
@@ -39,13 +47,16 @@ class AssemblyLine<E extends HTMLElement, Ctx> {
     public class(...classes: AssemblyLine.DynValue<ClassName | (ClassName)[], E, Ctx>[]): AssemblyLine<E, Ctx> {
         return this.addStep((e, ctx) => {
             for (const classList of classes) {
-                e.classList.add(
-                    ...[AssemblyLine.DynValue.resolve(classList, e, ctx)]
-                        .flat()
-                        .filter(c => c) // take truthy values
-                        .map(c => c.toString().split(/\W+/)) // split words
-                        .flat() // flatten to array of words
-                );
+                AssemblyLine.DynValue.resolve(classList, e, ctx)
+                    .then(classList => {
+                        e.classList.add(
+                            ...[AssemblyLine.DynValue.evaluate(classList, e, ctx)]
+                                .flat()
+                                .filter(c => c) // take truthy values
+                                .map(c => c.toString().split(/\W+/)) // split words
+                                .flat() // flatten to array of words
+                        );
+                    });
             }
 
             return { e, ctx };
@@ -59,15 +70,18 @@ class AssemblyLine<E extends HTMLElement, Ctx> {
      */
     public attr(name: AssemblyLine.DynValue<AttrName, E, Ctx>, value?: AssemblyLine.DynValue<AttrValue, E, Ctx>): AssemblyLine<E, Ctx> {
         return this.addStep((e, ctx) => {
-            const attrName = AssemblyLine.DynValue.resolve(name, e, ctx);
-
-            if (attrName) { // falsy values are ignored
-                if (value) {
-                    const attrValue = AssemblyLine.DynValue.resolve(value, e, ctx);
-                    if (attrValue !== null) e.setAttribute(attrName, attrValue);
-                }
-                else e.toggleAttribute(attrName, true); // no-value attribute
-            }
+            AssemblyLine.DynValue.resolve(name, e, ctx)
+                .then(attrName => {
+                    if (attrName) { // falsy values are ignored
+                        if (value) {
+                            AssemblyLine.DynValue.resolve(attrName, e, ctx)
+                                .then(attrValue => {
+                                    if (attrValue != null) e.setAttribute(attrName, attrValue);
+                                });
+                        }
+                        else e.toggleAttribute(attrName, true); // no-value attribute
+                    }
+                });
 
             return { e, ctx };
         });
@@ -79,13 +93,14 @@ class AssemblyLine<E extends HTMLElement, Ctx> {
      */
     public attrs(attributes: AssemblyLine.DynValue<Record<string, AttrValue>, E, Ctx>): AssemblyLine<E, Ctx> {
         return this.addStep((e, ctx) => {
-            const resolvedAttrs = AssemblyLine.DynValue.resolve(attributes, e, ctx);
+            AssemblyLine.DynValue.resolve(attributes, e, ctx)
+                .then(resolvedAttrs => {
+                    for (const attrName in resolvedAttrs) {
+                        const attrValue = resolvedAttrs[attrName];
 
-            for (const attrName in resolvedAttrs) {
-                const attrValue = resolvedAttrs[attrName];
-
-                if (attrValue !== null) e.setAttribute(attrName, attrValue);
-            }
+                        if (attrValue !== null) e.setAttribute(attrName, attrValue);
+                    }
+                });
 
             return { e, ctx };
         });
@@ -97,15 +112,27 @@ class AssemblyLine<E extends HTMLElement, Ctx> {
      */
     public children(...children: AssemblyLine.DynValue<Child<Ctx> | Child<Ctx>[], E, Ctx>[]): AssemblyLine<E, Ctx> {
         return this.addStep((e, ctx) => {
+
             for (const childList of children) {
-                const resolvedChildren = [AssemblyLine.DynValue.resolve(childList, e, ctx)].flat();
+                const evaluated = AssemblyLine.DynValue.evaluate(childList, e, ctx);
 
-                for (const child of resolvedChildren) {
-                    if (typeof child === "string") e.appendChild(document.createTextNode(child));
-                    else if (child instanceof Element) e.appendChild(child);
-                    else if (child instanceof AssemblyLine) e.appendChild(child.apply(ctx));
+                if (evaluated instanceof Promise) { // add placeholder, replace it later
+                    const placeholder = document.createElement("placeholder");
+                    e.appendChild(placeholder);
+
+                    evaluated.then(resolved =>
+                        placeholder.replaceWith(
+                            ...[resolved].flat()
+                                .map(c => childAsNode(c, ctx))
+                                .filter(n => n !== null)
+                        )
+                    );
                 }
-
+                else e.append( // append children now
+                    ...[evaluated].flat()
+                        .map(c => childAsNode(c, ctx))
+                        .filter(n => n !== null)
+                );
             }
 
             return { e, ctx };
@@ -118,7 +145,8 @@ class AssemblyLine<E extends HTMLElement, Ctx> {
      */
     public text(text: AssemblyLine.DynValue<string, E, Ctx>): AssemblyLine<E, Ctx> {
         return this.addStep((e, ctx) => {
-            e.textContent = AssemblyLine.DynValue.resolve(text, e, ctx);
+            AssemblyLine.DynValue.resolve(text, e, ctx)
+                .then(text => e.textContent = text);
 
             return { e, ctx };
         });
@@ -199,7 +227,7 @@ namespace AssemblyLine {
         Dynable<E, Ctx>[] |
         { [k: string]: Dynable<E, Ctx> };
     /** A DynValue is either a value, or a function which evaluates to a value. */
-    export type DynValue<T extends Dynable<E, Ctx>, E extends HTMLElement, Ctx> = T | ((e: E, ctx: Ctx) => T);
+    export type DynValue<T extends Dynable<E, Ctx>, E extends HTMLElement, Ctx> = T | Promise<T> | ((e: E, ctx: Ctx) => T | Promise<T>);
     export namespace DynValue {
 
         /**
@@ -209,8 +237,19 @@ namespace AssemblyLine {
          * @param ctx context
          * @returns the dynamically evaluated value
          */
-        export function resolve<T extends Dynable<E, Ctx>, E extends HTMLElement, Ctx>(dynValue: DynValue<T, E, Ctx>, e: E, ctx: Ctx): T {
+        export function evaluate<T extends Dynable<E, Ctx>, E extends HTMLElement, Ctx>(dynValue: DynValue<T, E, Ctx>, e: E, ctx: Ctx): T | Promise<T> {
             return typeof dynValue === "function" ? dynValue(e, ctx) : dynValue;
+        }
+
+        /**
+         * Evaluates a DynValue, and forces it to a Promise
+         * @param dynValue DynValue to evaluate
+         * @param e Element
+         * @param ctx context
+         * @returns the dynamically evaluated value
+         */
+        export function resolve<T extends Dynable<E, Ctx>, E extends HTMLElement, Ctx>(dynValue: DynValue<T, E, Ctx>, e: E, ctx: Ctx): Promise<T> {
+            return Promise.resolve(evaluate(dynValue, e, ctx));
         }
 
     }

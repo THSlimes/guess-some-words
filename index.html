@@ -65,6 +65,15 @@
             --text: #F4EFFA;
             --accent: #9B72CF;
         }
+
+        body[contrast=high] {
+            filter: contrast(1.5);
+        }
+
+        body[motion=reduced] * {
+            animation-duration: 0ms !important;
+            transition-duration: 0ms !important;
+        }
     </style>
 
 </head>

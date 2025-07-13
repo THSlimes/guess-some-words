@@ -26,26 +26,62 @@ body {
 }
 
 header {
+    position: relative;
+
     padding: var(--small-space) var(--big-space);
 
     height: 3rem;
-    overflow-y: hidden;
 
     justify-content: space-between;
     align-items: center;
 
     background-color: var(--primary);
 
-    >#color-palette-button {
-        height: 6rem;
+    >#settings-dropdown {
+        position: absolute;
+        top: 0px;
+        right: var(--big-space);
+
+        padding: calc(var(--small-space) + var(--tiny-space)) var(--tiny-space) var(--small-space) var(--tiny-space);
+        gap: var(--big-space);
+
+        box-sizing: border-box;
+        max-height: calc(3rem + 2 * var(--small-space));
+        --target-height: calc(3rem + 2 * var(--small-space));
+        overflow: hidden;
+
         background-color: var(--accent);
 
-        >* {
-            width: 3rem;
-            height: 3rem;
-            pointer-events: none;
-            user-select: none;
+        border-radius: 0px;
+
+        transition: max-height 150ms ease-out, border-radius 150ms ease-in-out;
+
+        > :first-child {
+            rotate: 0deg;
+            transition: rotate 150ms ease-out;
         }
+
+        &[open] {
+            max-height: var(--target-height);
+            border-radius: 0px 0px var(--rounding) var(--rounding);
+
+            > :first-child {
+                rotate: 60deg;
+            }
+        }
+
+        >* {
+            width: 2.5rem;
+            height: 2.5rem;
+
+            background: none;
+        }
+
+        * {
+            color: var(--text);
+        }
+
+        ;
     }
 }
 
@@ -82,7 +118,8 @@ a {
     color: var(--text);
 }
 
-button {
+button,
+input[type=button] {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -108,6 +145,13 @@ button {
 
 div {
     border-radius: var(--rounding);
+}
+
+svg.icon {
+    pointer-events: none;
+    width: 2.5rem;
+    height: 2.5rem;
+    flex-shrink: 0;
 }
 
 
