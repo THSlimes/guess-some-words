@@ -153,6 +153,19 @@ class AssemblyLine<E extends HTMLElement, Ctx> {
     }
 
     /**
+     * Adds a step to set the tooltip of the element.
+     * @param tooltip new text for the element
+     */
+    public tooltip(tooltip: AssemblyLine.DynValue<string, E, Ctx>): AssemblyLine<E, Ctx> {
+        return this.addStep((e, ctx) => {
+            AssemblyLine.DynValue.resolve(tooltip, e, ctx)
+                .then(tooltip => e.title = tooltip);
+
+            return { e, ctx };
+        });
+    }
+
+    /**
      * Adds a step that attaches an event handler to the element.
      * @param k event keyword
      * @param handler event handler

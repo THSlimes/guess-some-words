@@ -40,6 +40,7 @@ Promise.all([ // make header while waiting for page load
                         loadIcon("settings"),
                         AssemblyLine.fromTagName("button", {})
                             .id("color-palette-button")
+                            .tooltip("Color Palette")
                             .children(
                                 loadIcon(PALETTE_ICONS[ColorPalette.get()])
                             )
@@ -51,6 +52,7 @@ Promise.all([ // make header while waiting for page load
                             }),
                         AssemblyLine.fromTagName("button", {})
                             .id("high-contrast-button")
+                            .tooltip("Contrast")
                             .children(
                                 loadIcon(CONTRAST_ICONS[Contrast.get()])
                             )
@@ -62,6 +64,7 @@ Promise.all([ // make header while waiting for page load
                             }),
                         AssemblyLine.fromTagName("button", {})
                             .id("reduced-button")
+                            .tooltip("Reduced Motion")
                             .children(
                                 loadIcon(MOTION_ICONS[Motion.get()])
                             )
