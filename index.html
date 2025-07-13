@@ -11,44 +11,79 @@
 
     <!-- color palettes in document to load faster -->
     <style>
+        body {
+            --extra-font-weight: 0;
+        }
+
         body[palette=default-light] {
-            --bg: white;
-            --bg2: whitesmoke;
-            --text: black;
-            --accent1: red;
-            --accent2: lime;
+            --primary: #FFFCF2;
+            --secondary: #CCC5B9;
+            --tertiary: #403D39;
+            --text: #252422;
+            --accent: #EB5E28;
+
+            --extra-font-weight: 100;
         }
 
         body[palette=default-dark] {
-            --bg: black;
-            --bg2: darkslategray;
-            --text: white;
-            --accent1: red;
-            --accent2: lime;
+            --primary: #252422;
+            --secondary: #403D39;
+            --tertiary: #CCC5B9;
+            --text: #FFFCF2;
+            --accent: #EB5E28;
+        }
+
+        body[palette=plant] {
+            --primary: #386641;
+            --secondary: #6A994E;
+            --tertiary: #A7C957;
+            --text: #F2E8CF;
+            --accent: #D6383A;
+        }
+
+        body[palette=sardine] {
+            --primary: #293241;
+            --secondary: #3D5A80;
+            --tertiary: #98C1D9;
+            --text: #E0FBFC;
+            --accent: #EE6C4D;
+        }
+
+        body[palette=filmstrip] {
+            --primary: #463F3A;
+            --secondary: #8A817C;
+            --tertiary: #BCB8B1;
+            --text: #F4F3EE;
+            --accent: #E0AFA0;
+        }
+
+        body[palette=heart] {
+            --primary: #2F184B;
+            --secondary: #532B88;
+            --tertiary: #C8B1E4;
+            --text: #F4EFFA;
+            --accent: #9B72CF;
         }
     </style>
 
 </head>
 
-<body>
+<body class="flex rows">
     <!-- set initial palette until script takes over -->
     <script>
         document.body.setAttribute("palette", localStorage.getItem("palette") ?? "default-light");
     </script>
 
-    <h1>Guess Some Words!</h1>
-    <p>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure eligendi cum quas quasi quod ipsam fuga aut qui
-        numquam ex fugiat commodi, laudantium porro, ea ducimus, sed architecto rem consectetur.
-    </p>
+    <div id="content" class="flex rows">
 
-    <div>
-        <h2>This is a div.</h2>
-        <p>
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eaque, aliquam tenetur consequuntur adipisci sequi
-            similique placeat quibusdam dolores, quisquam temporibus repudiandae exercitationem quo totam nulla officia
-            deleniti natus, ut obcaecati.
-        </p>
+        <div>
+            <p>
+                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolore laudantium ullam a odio ea sit corporis
+                quasi numquam repellat hic. Provident blanditiis libero vel voluptas animi voluptates quasi, nostrum
+                eum?
+            </p>
+        </div>
+
     </div>
 
 </body>

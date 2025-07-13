@@ -62,7 +62,7 @@ namespace Responsive {
 
             document.body.toggleAttribute("hover", mq.matches); // set initial value
             mq.addEventListener("change", ev => { // set value on update
-                document.body.toggleAttribute("hover", ev.matches);
+                document.body.toggleAttribute("can-hover", ev.matches);
 
                 hoverChangeHandlers.forEach(h => h(ev.matches));
             });
