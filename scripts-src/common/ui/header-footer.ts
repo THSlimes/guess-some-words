@@ -18,7 +18,7 @@ Promise.all([ // make header while waiting for page load
                     )
                     .on("click", (_, self) => {
                         const newPalette = ColorPalette.setNext();
-                        self.firstElementChild!.setAttribute("src", `/images/icons/${newPalette}.svg`);
+                        self.firstElementChild!.setAttribute("src", `images/icons/${newPalette}.svg`);
                     })
             )
             .apply()
