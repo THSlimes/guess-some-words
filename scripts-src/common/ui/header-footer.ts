@@ -14,7 +14,7 @@ Promise.all([ // make header while waiting for page load
                     .id("color-palette-button")
                     .children(
                         AssemblyLine.fromTagName("img", {})
-                            .attr("src", `/images/icons/${ColorPalette.get()}.svg`)
+                            .attr("src", `images/icons/${ColorPalette.get()}.svg`)
                     )
                     .on("click", (_, self) => {
                         const newPalette = ColorPalette.setNext();
