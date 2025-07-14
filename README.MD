@@ -12,7 +12,8 @@ Custom functionality is provided through JSON objects. To dynamically compute va
 1. _Binary providers_ - Providers which take two arguments
 1. _Ternary providers_ - Providers which take three arguments
 
-Details on these are found below.
+### Provider Context
+Providers always operate within a specific _context_. This context contains information related to variables (and the current game). Some providers allow for the retrieval of context data.
 
 
 ### Nullary Providers
@@ -141,9 +142,25 @@ _Unary Providers_ are providers which take a single argument. They are represent
 
 #### Type Conversion
 
-| ```"to string"```      | Gives back the argument                                                | string        | string      |
-| ```"to string"```      | Converts the argument to a string                                      | number        | string      |
-| ```"to string"```      | Converts the argument to a boolean                                     | boolean       | string      |
+| Name               | Description                                                     | Argument Type | Return Type |
+| ------------------ | --------------------------------------------------------------- | ------------- | ----------- |
+| ```"to string"```  | Gives back the argument                                         | string        | string      |
+| ```"to string"```  | Converts the argument to a string                               | number        | string      |
+| ```"to string"```  | Converts the argument to a boolean                              | boolean       | string      |
+| ```"to number"```  | Parses the argument to a number                                 | string        | number      |
+| ```"to number"```  | Gives back the argument                                         | number        | number      |
+| ```"to number"```  | Gives `1` for `true`, and `0` for `false`                       | boolean       | number      |
+| ```"to boolean"``` | Gives `false` if the argument string is empty, `true` otherwise | string        | boolean     |
+| ```"to boolean"``` | Gives `false` if the argument is `0`, `true` otherwise          | number        | boolean     |
+| ```"to boolean"``` | Gives back the argument                                         | boolean       | boolean     |
+
+
+#### Context Variables
+| Name                     | Description                                                                                                          | Argument Type | Return Type |
+| ------------------------ | -------------------------------------------------------------------------------------------------------------------- | ------------- | ----------- |
+| ```"string variable"```  | Retrieves a string variable, with the argument being its name <br> _Throws an error if the variable does not exist_  | string        | string      |
+| ```"number variable"```  | Retrieves a number variable, with the argument being its name <br> _Throws an error if the variable does not exist_  | string        | number      |
+| ```"boolean variable"``` | Retrieves a boolean variable, with the argument being its name <br> _Throws an error if the variable does not exist_ | string        | boolean     |
 
 
 ### Binary Providers

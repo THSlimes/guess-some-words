@@ -1,4 +1,45 @@
-import { BOOLEAN, DDValue, getType, NUMBER, STRING, Type } from "./types";
+import { getType, Type } from "./types";
+
+export class ProviderContext {
+
+    private readonly stringVars: Record<string, string> = {};
+    private readonly numberVars: Record<string, number> = {};
+    private readonly booleanVars: Record<string, boolean> = {};
+
+    public setStringVar(name: string, value: string) {
+        this.stringVars[name] = value;
+    }
+
+    public getStringVar(name: string, defaultTo?: string): string {
+        const out = this.stringVars[name] ?? defaultTo;
+
+        if (out === undefined) throw new ReferenceError(`undefined string variable "${name}"`);
+        else return out;
+    }
+
+    public setNumberVar(name: string, value: number) {
+        this.numberVars[name] = value;
+    }
+
+    public getNumberVar(name: string, defaultTo?: number): number {
+        const out = this.numberVars[name] ?? defaultTo;
+
+        if (out === undefined) throw new ReferenceError(`undefined string variable "${name}"`);
+        else return out;
+    }
+
+    public setBooleanVar(name: string, value: boolean) {
+        this.booleanVars[name] = value;
+    }
+
+    public getBooleanVar(name: string, defaultTo?: boolean): boolean {
+        const out = this.booleanVars[name] ?? defaultTo;
+
+        if (out === undefined) throw new ReferenceError(`undefined string variable "${name}"`);
+        else return out;
+    }
+
+}
 
 type ArgTypes<Args extends any[]> = { [I in keyof Args]: Type<Args[I]> };
 
@@ -6,9 +47,9 @@ export abstract class Provider<Args extends any[], R> {
 
     public readonly argTypes: ArgTypes<Args>;
     public readonly returnType: Type<R>;
-    public readonly apply: (...args: Args) => R;
+    public readonly apply: (ctx: ProviderContext, ...args: Args) => R;
 
-    public constructor(argTypes: ArgTypes<Args>, returnType: Type<R>, impl: (...args: Args) => R) {
+    public constructor(argTypes: ArgTypes<Args>, returnType: Type<R>, impl: (ctx: ProviderContext, ...args: Args) => R) {
         this.argTypes = argTypes;
         this.returnType = returnType;
 
@@ -19,14 +60,14 @@ export abstract class Provider<Args extends any[], R> {
 
 export class NullaryProvider<R> extends Provider<[], R> {
 
-    public constructor(returnType: Type<R>, impl: () => R) {
+    public constructor(returnType: Type<R>, impl: (ctx: ProviderContext) => R) {
         super([], returnType, impl);
     }
 
     public chain<N>(next: UnaryProvider<R, N>): NullaryProvider<N> {
         return new NullaryProvider(
             next.returnType,
-            () => next.apply(this.apply())
+            ctx => next.apply(ctx, this.apply(ctx))
         );
     }
 
@@ -34,7 +75,7 @@ export class NullaryProvider<R> extends Provider<[], R> {
         return new UnaryProvider(
             next.rhsType,
             next.returnType,
-            rhs => next.apply(this.apply(), rhs)
+            (ctx, rhs) => next.apply(ctx, this.apply(ctx), rhs)
         );
     }
 
@@ -42,7 +83,7 @@ export class NullaryProvider<R> extends Provider<[], R> {
         return new UnaryProvider(
             next.lhsType,
             next.returnType,
-            lhs => next.apply(lhs, this.apply())
+            (ctx, lhs) => next.apply(ctx, lhs, this.apply(ctx))
         );
     }
 
@@ -63,7 +104,7 @@ export class UnaryProvider<A, R> extends Provider<[A], R> {
         return this.argTypes[0];
     }
 
-    public constructor(argType: Type<A>, returnType: Type<R>, impl: (arg: A) => R) {
+    public constructor(argType: Type<A>, returnType: Type<R>, impl: (ctx: ProviderContext, arg: A) => R) {
         super([argType], returnType, impl);
     }
 
@@ -71,7 +112,7 @@ export class UnaryProvider<A, R> extends Provider<[A], R> {
         return new UnaryProvider(
             this.argType,
             next.returnType,
-            arg => next.apply(this.apply(arg))
+            (ctx, arg) => next.apply(ctx, this.apply(ctx, arg))
         );
     }
 
@@ -80,7 +121,7 @@ export class UnaryProvider<A, R> extends Provider<[A], R> {
             this.argType,
             next.rhsType,
             next.returnType,
-            (arg: A, rhs: RHS) => next.apply(this.apply(arg), rhs)
+            (ctx, arg: A, rhs: RHS) => next.apply(ctx, this.apply(ctx, arg), rhs)
         );
     }
 
@@ -89,7 +130,7 @@ export class UnaryProvider<A, R> extends Provider<[A], R> {
             next.lhsType,
             this.argType,
             next.returnType,
-            (lhs: LHS, arg: A) => next.apply(lhs, this.apply(arg))
+            (ctx, lhs: LHS, arg: A) => next.apply(ctx, lhs, this.apply(ctx, arg))
         );
     }
 
@@ -107,7 +148,7 @@ export class BinaryProvider<LHS, RHS, R> extends Provider<[LHS, RHS], R> {
 
     public readonly isCommutative: boolean;
 
-    public constructor(lhsType: Type<LHS>, rhsType: Type<RHS>, returnType: Type<R>, impl: (lhs: LHS, rhs: RHS) => R, isCommutative = false) {
+    public constructor(lhsType: Type<LHS>, rhsType: Type<RHS>, returnType: Type<R>, impl: (ctx: ProviderContext, lhs: LHS, rhs: RHS) => R, isCommutative = false) {
         super([lhsType, rhsType], returnType, impl);
 
         this.isCommutative = isCommutative;
@@ -118,7 +159,7 @@ export class BinaryProvider<LHS, RHS, R> extends Provider<[LHS, RHS], R> {
             this.lhsType,
             this.rhsType,
             next.returnType,
-            (lhs: LHS, rhs: RHS) => next.apply(this.apply(lhs, rhs))
+            (ctx, lhs: LHS, rhs: RHS) => next.apply(ctx, this.apply(ctx, lhs, rhs))
         );
     }
 
@@ -138,7 +179,7 @@ export class TernaryProvider<A, B, C, R> extends Provider<[A, B, C], R> {
         return this.argTypes[2];
     }
 
-    public constructor(aType: Type<A>, bType: Type<B>, cType: Type<C>, returnType: Type<R>, impl: (a: A, b: B, c: C) => R) {
+    public constructor(aType: Type<A>, bType: Type<B>, cType: Type<C>, returnType: Type<R>, impl: (ctx: ProviderContext, a: A, b: B, c: C) => R) {
         super([aType, bType, cType], returnType, impl);
     }
 
@@ -148,7 +189,7 @@ export class TernaryProvider<A, B, C, R> extends Provider<[A, B, C], R> {
             this.bType,
             this.cType,
             next.returnType,
-            (a: A, b: B, c: C) => next.apply(this.apply(a, b, c))
+            (ctx: ProviderContext, a: A, b: B, c: C) => next.apply(ctx, this.apply(ctx, a, b, c))
         );
     }
 

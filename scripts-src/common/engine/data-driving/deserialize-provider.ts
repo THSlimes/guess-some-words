@@ -1,5 +1,5 @@
 import { NullaryProvider, UnaryProvider } from "./Provider";
-import { ALL_BINARY_PROVIDERS, ALL_NULLARY_PROVIDERS, ALL_UNARY_PROVIDERS } from "./standard-providers";
+import { ALL_BINARY_PROVIDERS, ALL_NULLARY_PROVIDERS, ALL_TERNARY_PROVIDERS, ALL_UNARY_PROVIDERS } from "./standard-providers";
 import { DDValue, isDDValue } from "./types";
 
 interface SerializedNullaryProvider {
@@ -27,7 +27,7 @@ function isSerializedUnaryProvider(v: unknown): v is SerializedUnaryProvider {
 
 interface SerializedBinaryProvider {
     name: string,
-    lhs: SerializedProviderArg
+    lhs: SerializedProviderArg,
     rhs: SerializedProviderArg
 }
 function isSerializedBinaryProvider(v: unknown): v is SerializedBinaryProvider {
@@ -41,20 +41,61 @@ function isSerializedBinaryProvider(v: unknown): v is SerializedBinaryProvider {
         && isSerializedProviderArg(v.rhs);
 }
 
+interface SerializedTernaryProvider {
+    name: string,
+    a: SerializedProviderArg,
+    b: SerializedProviderArg,
+    c: SerializedProviderArg
+}
+function isSerializedTernaryProvider(v: unknown): v is SerializedTernaryProvider {
+    return typeof v === "object"
+        && v !== null
+        && "name" in v
+        && typeof v.name === "string"
+        && 'a' in v
+        && isSerializedProviderArg(v.a)
+        && 'b' in v
+        && isSerializedProviderArg(v.b)
+        && 'c' in v
+        && isSerializedProviderArg(v.c);
+}
+
 export type SerializedProviderArg =
     DDValue |
     SerializedNullaryProvider |
     SerializedUnaryProvider |
-    SerializedBinaryProvider;
-function isSerializedProviderArg(v: unknown): v is SerializedProviderArg {
+    SerializedBinaryProvider |
+    SerializedTernaryProvider;
+export function isSerializedProviderArg(v: unknown): v is SerializedProviderArg {
     return isDDValue(v)
         || isSerializedNullaryProvider(v)
         || isSerializedUnaryProvider(v)
-        || isSerializedBinaryProvider(v);
+        || isSerializedBinaryProvider(v)
+        || isSerializedTernaryProvider(v);
 }
 
 export function deserializeProvider(serialized: SerializedProviderArg): NullaryProvider<any> {
     if (isDDValue(serialized)) return NullaryProvider.literal(serialized);
+    else if (isSerializedTernaryProvider(serialized)) {
+        const ternaryProviderCollection = ALL_TERNARY_PROVIDERS[serialized.name];
+        if (!ternaryProviderCollection) throw new ReferenceError(`no ternary provider with name "${serialized.name}" exists`);
+
+        const aProvider = deserializeProvider(serialized.a);
+        const bProvider = deserializeProvider(serialized.b);
+        const cProvider = deserializeProvider(serialized.c);
+
+        const ternaryProvider = ternaryProviderCollection.findImpl(aProvider.returnType, bProvider.returnType, cProvider.returnType);
+
+        return new NullaryProvider(
+            ternaryProvider.returnType,
+            ctx => ternaryProvider.apply(
+                ctx,
+                aProvider.apply(ctx),
+                bProvider.apply(ctx),
+                cProvider.apply(ctx)
+            )
+        );
+    }
     else if (isSerializedBinaryProvider(serialized)) {
         const binaryProviderCollection = ALL_BINARY_PROVIDERS[serialized.name];
         if (!binaryProviderCollection) throw new ReferenceError(`no binary provider with name "${serialized.name}" exists`);
