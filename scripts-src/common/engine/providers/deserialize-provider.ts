@@ -1,6 +1,6 @@
-import { NullaryProvider, UnaryProvider } from "./Provider";
+import { NullaryProvider } from "./Provider";
 import { ALL_BINARY_PROVIDERS, ALL_NULLARY_PROVIDERS, ALL_TERNARY_PROVIDERS, ALL_UNARY_PROVIDERS } from "./standard-providers";
-import { DDValue, isDDValue } from "./types";
+import { DDValue, isDDValue } from "../types";
 
 interface SerializedNullaryProvider {
     name: string

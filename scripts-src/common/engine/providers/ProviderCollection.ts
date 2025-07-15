@@ -1,5 +1,5 @@
 import { BinaryProvider, TernaryProvider, UnaryProvider } from "./Provider";
-import { Type } from "./types";
+import { Type } from "../types";
 
 export class UnaryProviderCollection<M extends UnaryProvider<any, any>[]> {
 
@@ -43,7 +43,7 @@ export class BinaryProviderCollection<M extends BinaryProvider<any, any, any>[]>
                     p.rhsType,
                     p.lhsType,
                     p.returnType,
-                    (rhs, lhs) => p.apply(lhs, rhs)
+                    (ctx, rhs, lhs) => p.apply(ctx, lhs, rhs)
                 ) as Extract<M[number], BinaryProvider<LHS, RHS, any>>;
             }
         }

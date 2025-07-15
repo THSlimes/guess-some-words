@@ -1,0 +1,20 @@
+{
+    "test.firstPhrase": "This is the first phrase",
+    "test.secondPhrase": "This is the second phrase",
+    "test.thirdPhrase": "This is the third phrase",
+    "test.nthPhrase": {
+        "name": "add",
+        "lhs": "This is the ",
+        "rhs": {
+            "name": "add",
+            "lhs": {
+                "name": "to string",
+                "arg": {
+                    "name": "number variable",
+                    "arg": "n"
+                }
+            },
+            "rhs": "th phrase"
+        }
+    }
+}

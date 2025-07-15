@@ -1,0 +1,20 @@
+{
+    "test.firstPhrase": "Dit is de eerste regel",
+    "test.secondPhrase": "Dit is de tweede regel",
+    "test.thirdPhrase": "Dit is de derde regel",
+    "test.nthPhrase": {
+        "name": "add",
+        "lhs": "Dit is de ",
+        "rhs": {
+            "name": "add",
+            "lhs": {
+                "name": "to string",
+                "arg": {
+                    "name": "number variable",
+                    "arg": "n"
+                }
+            },
+            "rhs": "e regel"
+        }
+    }
+}

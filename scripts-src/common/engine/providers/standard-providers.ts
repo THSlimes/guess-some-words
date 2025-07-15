@@ -1,7 +1,7 @@
 import RandomUtil from "../../util/RandomUtil";
 import { BinaryProvider, NullaryProvider, TernaryProvider, UnaryProvider } from "./Provider";
 import { BinaryProviderCollection, TernaryProviderCollection, UnaryProviderCollection } from "./ProviderCollection";
-import { BOOLEAN, BOOLEAN_ARRAY, BOOLEAN_ARRAY_ARRAY, NUMBER, NUMBER_ARRAY, NUMBER_ARRAY_ARRAY, STRING, STRING_ARRAY, STRING_ARRAY_ARRAY } from "./types";
+import { BOOLEAN, BOOLEAN_ARRAY, BOOLEAN_ARRAY_ARRAY, NUMBER, NUMBER_ARRAY, NUMBER_ARRAY_ARRAY, STRING, STRING_ARRAY, STRING_ARRAY_ARRAY } from "../types";
 
 export const ALL_NULLARY_PROVIDERS: Record<string, NullaryProvider<any>> = {
     "random number": new NullaryProvider(NUMBER, Math.random),

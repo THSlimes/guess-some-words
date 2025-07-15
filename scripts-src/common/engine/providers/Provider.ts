@@ -1,10 +1,11 @@
-import { getType, Type } from "./types";
+import { getType, Type } from "../types";
 
 export class ProviderContext {
 
     private readonly stringVars: Record<string, string> = {};
     private readonly numberVars: Record<string, number> = {};
     private readonly booleanVars: Record<string, boolean> = {};
+
 
     public setStringVar(name: string, value: string) {
         this.stringVars[name] = value;
@@ -37,6 +38,37 @@ export class ProviderContext {
 
         if (out === undefined) throw new ReferenceError(`undefined string variable "${name}"`);
         else return out;
+    }
+
+    /**
+     * Makes a deep-copy of this ProviderContext
+     */
+    public copy(): ProviderContext {
+        const out = new ProviderContext();
+
+        // copy over variables
+        for (const k in this.stringVars) out.setStringVar(k, this.stringVars[k]);
+        for (const k in this.numberVars) out.setNumberVar(k, this.numberVars[k]);
+        for (const k in this.booleanVars) out.setBooleanVar(k, this.booleanVars[k]);
+
+        return out;
+    }
+
+
+
+    public static fromVars(vars: Record<string, string | number | boolean>): ProviderContext {
+        const out = new ProviderContext();
+
+        // copy over variables
+        for (const k in vars) {
+            const v = vars[k];
+
+            if (typeof v === "string") out.setStringVar(k, v);
+            if (typeof v === "number") out.setNumberVar(k, v);
+            if (typeof v === "boolean") out.setBooleanVar(k, v);
+        }
+
+        return out;
     }
 
 }
