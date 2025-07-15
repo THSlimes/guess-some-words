@@ -32,6 +32,7 @@ export default class PhraseManager {
      * @param dict new Dictionary
      */
     public setDictionary(dict: Dictionary) {
+
         if (dict !== this.dict) {
             this.dict = dict;
 

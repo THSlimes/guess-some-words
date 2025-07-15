@@ -33,7 +33,7 @@ namespace ColorPalette {
     export function get(): ColorPalette {
         const palette = localStorage.getItem(LOCAL_STORAGE_KEY);
 
-        return isPalette(palette) ? palette : ColorPalette.DEFAULT_LIGHT;
+        return isPalette(palette) ? palette : DEFAULT_PALETTE;
     }
 
     /**

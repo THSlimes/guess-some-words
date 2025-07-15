@@ -13,15 +13,7 @@ export default class Dictionary {
     public constructor(locale: string | Intl.Locale) {
         this.locale = new Intl.Locale(locale);
     }
-
-    public localeMatchScore(target: Intl.Locale | string): number {
-        if (typeof target === "string") return this.localeMatchScore(new Intl.Locale(target));
-
-        if (target.language !== this.locale.language) return 0;
-        else if (target.script !== this.locale.script) return 1;
-        else if (target.region !== this.locale.region) return 2;
-        else return 3;
-    }
+    
 
     public register(translations: Translations): this {
         this.translations = { ...this.translations, ...translations };

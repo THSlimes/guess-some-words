@@ -22,7 +22,7 @@ namespace Contrast {
     export function get(): Contrast {
         const contrast = localStorage.getItem(LOCAL_STORAGE_KEY);
 
-        return isContrast(contrast) ? contrast : Contrast.NORMAL;
+        return isContrast(contrast) ? contrast : DEFAULT_CONTRAST;
     }
 
     /**
@@ -56,7 +56,7 @@ namespace Contrast {
     if (isContrast(savedContrast)) set(savedContrast); // has saved contrast
     else { // no saved contrast, use preference
         if (matchMedia("(prefers-contrast: more)").matches) set(Contrast.HIGH);
-        else set(Contrast.NORMAL);
+        else set(DEFAULT_CONTRAST);
     }
 
 }

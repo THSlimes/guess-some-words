@@ -66,11 +66,12 @@ header {
             border-radius: 0px 0px var(--rounding) var(--rounding);
 
             > :first-child {
-                rotate: 60deg;
+                rotate: -60deg;
             }
         }
 
-        >* {
+        >svg,
+        >button {
             width: 2.5rem;
             height: 2.5rem;
 
@@ -80,8 +81,6 @@ header {
         * {
             color: var(--text);
         }
-
-        ;
     }
 }
 
@@ -147,13 +146,20 @@ div {
     border-radius: var(--rounding);
 }
 
+div.hr {
+    box-sizing: border-box;
+    width: 100%;
+
+    border: 1px solid var(--text);
+    border-radius: var(--rounding);
+}
+
 svg.icon {
     pointer-events: none;
     width: 2.5rem;
     height: 2.5rem;
     flex-shrink: 0;
 }
-
 
 div#content {
     padding: var(--big-space);

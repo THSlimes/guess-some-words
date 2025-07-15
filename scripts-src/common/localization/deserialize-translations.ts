@@ -16,6 +16,7 @@ export function deserializeTranslations(serialized: SerializedTranslations): Tra
 
 export function loadTranslations(locale: string | Intl.Locale): Promise<Translations> {
     locale = locale.toString();
+    if (!locale.startsWith("lang")) locale = "lang/" + locale;
     if (!locale.endsWith(".json")) locale += ".json";
 
     return fetch(locale)

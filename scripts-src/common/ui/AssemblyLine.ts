@@ -1,3 +1,7 @@
+import { ProviderContext } from "../engine/providers/Provider";
+import PhraseManager from "../localization/PhraseManager";
+import Language from "./settings/Language";
+
 type ClassName = string | false;
 type AttrName = string | false | null;
 type AttrValue = string | null;
@@ -152,6 +156,15 @@ class AssemblyLine<E extends HTMLElement, Ctx> {
         });
     }
 
+    public phraseText(dictKey: AssemblyLine.DynValue<string, E, Ctx>, providerCtx: ProviderContext = new ProviderContext(), manager: Promise<PhraseManager> = Language.MANAGER_PROMISE): AssemblyLine<E, Ctx> {
+        return this.addStep((e, ctx) => {
+            Promise.all([manager, AssemblyLine.DynValue.evaluate(dictKey, e, ctx)])
+                .then(([manager, dictKey]) => manager.registerTextContent(dictKey, providerCtx, e));
+
+            return { e, ctx };
+        });
+    }
+
     /**
      * Adds a step to set the tooltip of the element.
      * @param tooltip new text for the element
@@ -160,6 +173,15 @@ class AssemblyLine<E extends HTMLElement, Ctx> {
         return this.addStep((e, ctx) => {
             AssemblyLine.DynValue.resolve(tooltip, e, ctx)
                 .then(tooltip => e.title = tooltip);
+
+            return { e, ctx };
+        });
+    }
+
+    public phraseTooltip(dictKey: AssemblyLine.DynValue<string, E, Ctx>, providerCtx: ProviderContext = new ProviderContext(), manager = Language.MANAGER_PROMISE): AssemblyLine<E, Ctx> {
+        return this.addStep((e, ctx) => {
+            Promise.all([manager, AssemblyLine.DynValue.evaluate(dictKey, e, ctx)])
+                .then(([manager, dictKey]) => manager.registerTitle(dictKey, providerCtx, e));
 
             return { e, ctx };
         });

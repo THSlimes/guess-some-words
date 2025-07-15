@@ -22,7 +22,7 @@ namespace Motion {
     export function get(): Motion {
         const motion = localStorage.getItem(LOCAL_STORAGE_KEY);
 
-        return isMotion(motion) ? motion : Motion.NORMAL;
+        return isMotion(motion) ? motion : DEFAULT_MOTION;
     }
 
     /**
@@ -56,7 +56,7 @@ namespace Motion {
     if (isMotion(savedMotion)) set(savedMotion); // has saved motion setting
     else { // no saved setting, use preference
         if (matchMedia("(prefers-reduced-motion: reduce)").matches) set(Motion.REDUCED);
-        else set(Motion.NORMAL);
+        else set(DEFAULT_MOTION);
     }
 
 }

@@ -9,7 +9,9 @@ export type IconName =
     "contrast" |
     "contrast-circle" |
     "trail-length" |
-    "trail-length-short";
+    "trail-length-short" |
+    "nl-flag" |
+    "us-flag";
 
 const parser = new DOMParser();
 

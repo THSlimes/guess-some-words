@@ -1,20 +1,8 @@
 {
-    "test.firstPhrase": "This is the first phrase",
-    "test.secondPhrase": "This is the second phrase",
-    "test.thirdPhrase": "This is the third phrase",
-    "test.nthPhrase": {
-        "name": "add",
-        "lhs": "This is the ",
-        "rhs": {
-            "name": "add",
-            "lhs": {
-                "name": "to string",
-                "arg": {
-                    "name": "number variable",
-                    "arg": "n"
-                }
-            },
-            "rhs": "th phrase"
-        }
-    }
+    "header.settings.language": "Language",
+    "header.settings.colorPalette": "Color Palette",
+    "header.settings.contrast": "Contrast",
+    "header.settings.reducedMotion": "Reduced Motion",
+
+    "footer.madeBy": "Made by"
 }

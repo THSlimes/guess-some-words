@@ -5,6 +5,7 @@ import Responsive from "./Responsive";
 import loadIcon, { IconName } from "./load-icon";
 import Contrast from "./settings/Contrast";
 import Motion from "./settings/Motion";
+import Language from "./settings/Language";
 
 const PALETTE_ICONS: Record<ColorPalette, IconName> = {
     [ColorPalette.DEFAULT_LIGHT]: "light-mode",
@@ -25,6 +26,11 @@ const MOTION_ICONS: Record<Motion, IconName> = {
     [Motion.REDUCED]: "trail-length-short"
 }
 
+const LANGUAGE_ICONS: Record<Language, IconName> = {
+    [Language.ENGLISH]: "us-flag",
+    [Language.DUTCH]: "nl-flag"
+}
+
 Promise.all([ // make header while waiting for page load
     (async () => // make header
         AssemblyLine.fromTagName("header", {})
@@ -38,9 +44,23 @@ Promise.all([ // make header while waiting for page load
                     .class("flex", "rows")
                     .children(
                         loadIcon("settings"),
+                        AssemblyLine.fromTagName("div", {})
+                            .class("hr"),
+                        AssemblyLine.fromTagName("button", {})
+                            .id("language-button")
+                            .phraseTooltip("header.settings.language")
+                            .children(
+                                loadIcon(LANGUAGE_ICONS[Language.get()])
+                            )
+                            .on("click", (_, self) => {
+                                const newLanguage = Language.setNext();
+
+                                loadIcon(LANGUAGE_ICONS[newLanguage])
+                                    .then(icon => self.firstChild?.replaceWith(icon));
+                            }),
                         AssemblyLine.fromTagName("button", {})
                             .id("color-palette-button")
-                            .tooltip("Color Palette")
+                            .phraseTooltip("header.settings.colorPalette")
                             .children(
                                 loadIcon(PALETTE_ICONS[ColorPalette.get()])
                             )
@@ -52,7 +72,7 @@ Promise.all([ // make header while waiting for page load
                             }),
                         AssemblyLine.fromTagName("button", {})
                             .id("high-contrast-button")
-                            .tooltip("Contrast")
+                            .phraseTooltip("header.settings.contrast")
                             .children(
                                 loadIcon(CONTRAST_ICONS[Contrast.get()])
                             )
@@ -63,8 +83,8 @@ Promise.all([ // make header while waiting for page load
                                     .then(icon => self.firstChild?.replaceWith(icon));
                             }),
                         AssemblyLine.fromTagName("button", {})
-                            .id("reduced-button")
-                            .tooltip("Reduced Motion")
+                            .id("reduced-motion-button")
+                            .phraseTooltip("header.settings.reducedMotion")
                             .children(
                                 loadIcon(MOTION_ICONS[Motion.get()])
                             )
@@ -98,7 +118,7 @@ Promise.all([ // make header while waiting for page load
             .class("flex", "columns")
             .children(
                 AssemblyLine.fromTagName("p", {})
-                    .text("Made by"),
+                    .phraseText("footer.madeBy"),
                 AssemblyLine.fromTagName('a', {})
                     .text("THSlimes")
                     .attr("href", "https://github.com/THSlimes")

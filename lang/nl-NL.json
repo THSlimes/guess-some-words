@@ -1,20 +1,8 @@
 {
-    "test.firstPhrase": "Dit is de eerste regel",
-    "test.secondPhrase": "Dit is de tweede regel",
-    "test.thirdPhrase": "Dit is de derde regel",
-    "test.nthPhrase": {
-        "name": "add",
-        "lhs": "Dit is de ",
-        "rhs": {
-            "name": "add",
-            "lhs": {
-                "name": "to string",
-                "arg": {
-                    "name": "number variable",
-                    "arg": "n"
-                }
-            },
-            "rhs": "e regel"
-        }
-    }
+    "header.settings.language": "Taal",
+    "header.settings.colorPalette": "Kleurthema",
+    "header.settings.contrast": "Contrast",
+    "header.settings.reducedMotion": "Prikkelarm",
+
+    "footer.madeBy": "Gemaakt door"
 }
