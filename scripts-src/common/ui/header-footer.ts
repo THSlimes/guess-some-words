@@ -109,7 +109,11 @@ Promise.all([ // make header while waiting for page load
                             self.toggleAttribute("open");
                             self.style.setProperty("--target-height", `${self.scrollHeight}px`);
                         }
-                    }),
+                    })
+                    .do(self =>
+                        new MutationObserver(() => self.style.setProperty("--target-height", `${self.scrollHeight}px`))
+                            .observe(self, { childList: true, subtree: true })
+                    ),
             )
             .apply()
     )(),
