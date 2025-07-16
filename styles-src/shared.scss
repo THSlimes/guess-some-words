@@ -183,6 +183,8 @@ div#content {
     }
 }
 
+
+
 // Utility Classes
 
 .flex {
@@ -204,4 +206,37 @@ div#content {
         }
     }
 
+}
+
+
+
+// Responsive Design
+
+body[resolution=tiny] {
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    h2 {
+        font-size: 1.125rem;
+    }
+
+    h3 {
+        font-size: 0.8775rem;
+    }
+
+    h4,
+    p,
+    a,
+    label {
+        font-size: 0.75rem;
+    }
+
+    h5 {
+        font-size: 0.6225rem;
+    }
+
+    h6 {
+        font-size: 0.5025rem;
+    }
 }

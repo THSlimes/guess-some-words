@@ -15,13 +15,13 @@ namespace Responsive {
         public static readonly TABLET = new Viewport("tablet", 3, 4);
         public static readonly MOBILE = new Viewport("mobile", 9, 16);
         public static readonly MOBILE_SLIM = new Viewport("mobile-slim", 9, 22);
-        public static readonly ALL: Readonly<Viewport[]> = [
-            this.MOBILE_SLIM,
-            this.MOBILE,
-            this.TABLET,
+        public static readonly ALL: Readonly<Viewport[]> = Object.freeze([
+            this.DESKTOP_WIDE,
             this.DESKTOP,
-            this.DESKTOP_WIDE
-        ];
+            this.TABLET,
+            this.MOBILE,
+            this.MOBILE_SLIM
+        ]);
 
         public readonly name: string;
         private readonly width: number;
@@ -37,17 +37,9 @@ namespace Responsive {
             this.width = width;
             this.height = height
 
-            this.mediaQuery = matchMedia(`(max-aspect-ratio: ${width} / ${height})`);
+            this.mediaQuery = matchMedia(`(min-aspect-ratio: ${width} / ${height})`);
         }
 
-
-        public isSlimmerThan(other: Viewport): boolean {
-            return this < other;
-        }
-
-        public isWiderThan(other: Viewport): boolean {
-            return this > other;
-        }
 
         public [Symbol.toPrimitive](hint: string) {
             return hint === "number" ? this.ratio : this.name;
@@ -55,9 +47,9 @@ namespace Responsive {
 
     }
 
-    let currentViewport = Viewport.DESKTOP_WIDE;
+    let currentViewport: Viewport | undefined = undefined;
     export function getViewport() {
-        return currentViewport;
+        return currentViewport!;
     }
 
     type ViewportChangeHandler = (vp: Viewport) => void;
@@ -70,17 +62,81 @@ namespace Responsive {
     Loading.onceDOMContentLoaded()
         .then(() => {
             window.addEventListener("resize", () => {
-                const firstMatch = Viewport.ALL.find(vp => vp.mediaQuery.matches) ?? Viewport.DESKTOP_WIDE;
+                const firstMatch = Viewport.ALL.find(vp => vp.mediaQuery.matches) ?? Viewport.MOBILE_SLIM;
 
                 if (firstMatch !== currentViewport) {
                     currentViewport = firstMatch;
                     document.body.setAttribute("viewport", currentViewport.name);
-                    viewportChangeHandlers.forEach(h => h(currentViewport));
+                    viewportChangeHandlers.forEach(h => h(currentViewport!));
                 }
             });
 
             window.dispatchEvent(new Event("resize"));
         });
+
+
+
+    // resolution
+
+    export class Resolution {
+
+        public static readonly TINY = new Resolution("tiny", 300);
+        public static readonly SMALL = new Resolution("small", 400);
+        public static readonly MEDIUM = new Resolution("medium", 600);
+        public static readonly BIG = new Resolution("big", 1000);
+        public static readonly ALL: Readonly<Resolution[]> = Object.freeze([
+            this.BIG,
+            this.MEDIUM,
+            this.SMALL,
+            this.TINY,
+        ]);
+
+        public readonly name: string;
+        private readonly size: number;
+
+        public readonly mediaQuery: MediaQueryList;
+
+        private constructor(name: string, size: number) {
+            this.name = name;
+            this.size = size;
+
+            this.mediaQuery = matchMedia(`(min-width: ${size}px) and (min-height: ${size / 16 * 9}px)`);
+        }
+
+
+        public [Symbol.toPrimitive](hint: string) {
+            return hint === "number" ? this.size : this.name;
+        }
+
+    }
+
+    let currentResolution: Resolution | undefined = undefined;
+    export function getResolution() {
+        return currentResolution!;
+    }
+
+    type ResolutionChangeHandler = (r: Resolution) => void;
+    const resolutionChangeHandlers: Set<ResolutionChangeHandler> = new Set();
+    /** Attaches a callback function that is called when the viewport updates. */
+    export function onResolutionChanged(handler: ResolutionChangeHandler) {
+        resolutionChangeHandlers.add(handler);
+    }
+
+    Loading.onceDOMContentLoaded()
+        .then(() => {
+            window.addEventListener("resize", () => {
+                const firstMatch = Resolution.ALL.find(vp => vp.mediaQuery.matches) ?? Resolution.TINY;
+
+                if (firstMatch !== currentResolution) {
+                    currentResolution = firstMatch;
+                    document.body.setAttribute("resolution", currentResolution.name);
+                    resolutionChangeHandlers.forEach(h => h(currentResolution!));
+                }
+            });
+
+            window.dispatchEvent(new Event("resize"));
+        });
+
 
 
     // hover
@@ -111,6 +167,7 @@ namespace Responsive {
                 hoverChangeHandlers.forEach(h => h(ev.matches));
             });
         });
+
 
 
     // pointer accuracy

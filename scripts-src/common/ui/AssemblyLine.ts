@@ -10,7 +10,7 @@ type Child<Ctx> = string | Element | AssemblyLine<any, Ctx> | null | false;
 function childAsNode<Ctx>(child: Child<Ctx>, ctx: Ctx): Node | null {
     if (typeof child === "string") return document.createTextNode(child);
     else if (child instanceof Element) return child;
-    else if (child instanceof AssemblyLine) return child.apply(ctx);
+    else if (child instanceof AssemblyLine) return child.apply(ctx as any);
     else return null;
 }
 
@@ -221,8 +221,8 @@ class AssemblyLine<E extends HTMLElement, Ctx> {
         });
     }
 
-    public apply(ctx: Partial<Ctx> = {}): E {
-        const resolvedCtx: Ctx = { ...this.defaultCtx, ...ctx }; // apply default values
+    public apply(ctx?: AssemblyLine.PartialContext<Ctx>): E {
+        const resolvedCtx: Ctx = AssemblyLine.applyContextDefaults(this.defaultCtx, ctx);
 
         return this.mold(resolvedCtx).e;
     }
@@ -242,6 +242,14 @@ class AssemblyLine<E extends HTMLElement, Ctx> {
 }
 
 namespace AssemblyLine {
+
+    export type PartialContext<Ctx> =
+        Ctx extends Record<string, any> ? Partial<Ctx> :
+        Ctx;
+    export function applyContextDefaults<Ctx>(defaults: Ctx, partial?: PartialContext<Ctx>): Ctx {
+        if (typeof defaults === "object" && defaults !== null) return { ...defaults, ...partial };
+        else return (partial ?? defaults) as Ctx;
+    }
 
     /** A Mold is a function which initializes an Element, given the context. */
     export type Mold<E extends HTMLElement, Ctx> = (ctx: Ctx) => { e: E, ctx: Ctx };

@@ -166,5 +166,9 @@ Loading.onceDOMContentLoaded()
                 .text("pointer accuracy: " + Responsive.getPointerAccuracy())
                 .do(self => Responsive.onPointerChanged(pa => self.textContent = "pointer accuracy: " + pa))
                 .apply(),
+            AssemblyLine.fromTagName('p', {})
+                .text("resolution: " + Responsive.getResolution())
+                .do(self => Responsive.onResolutionChanged(r => self.textContent = "resolution: " + r))
+                .apply(),
         );
     });
