@@ -17,15 +17,8 @@ export type IconName =
 
 const parser = new DOMParser();
 
-function getIconSize(resolution: Responsive.Resolution): number {
-    switch (resolution) {
-        case Responsive.Resolution.TINY: return 24;
-        default: return 40;
-    }
-}
-
 export default function loadIcon(name: IconName): Promise<SVGElement> {
-    return fetch(`images/icons/40px/${name}.svg`)
+    return fetch(`images/icons/${name}.svg`)
         .then(res => {
             if (res.ok) return res.text();
             else throw new Error("icon SVG not found");
