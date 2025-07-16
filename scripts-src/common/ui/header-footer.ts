@@ -96,16 +96,16 @@ Promise.all([ // make header while waiting for page load
                             }),
                     )
                     .on("mouseenter", (_, self) => { // open on hover
-                        if (Responsive.canHover()) {
+                        if (Responsive.getViewport() > Responsive.Viewport.TABLET && Responsive.canHover()) {
                             self.toggleAttribute("open", true);
                             self.style.setProperty("--target-height", `${self.scrollHeight}px`);
                         }
                     })
                     .on("mouseleave", (_, self) => { // close on non-hover
-                        if (Responsive.canHover()) self.toggleAttribute("open", false);
+                        if (Responsive.getViewport() > Responsive.Viewport.TABLET && Responsive.canHover()) self.toggleAttribute("open", false);
                     })
                     .on("click", (_, self) => { // if hover not available, toggle on click
-                        if (!Responsive.canHover()) {
+                        if (Responsive.getViewport() <= Responsive.Viewport.TABLET || !Responsive.canHover()) {
                             self.toggleAttribute("open");
                             self.style.setProperty("--target-height", `${self.scrollHeight}px`);
                         }
@@ -130,3 +130,41 @@ Promise.all([ // make header while waiting for page load
     document.body.prepend(header);
     document.body.append(footer);
 });
+
+
+
+// DEBUG
+
+Loading.onceDOMContentLoaded()
+    .then(() => Loading.getElementById("panel", HTMLDivElement))
+    .then(panel => {
+        panel.append(
+            AssemblyLine.fromTagName('p', {})
+                .text("language: " + Language.get())
+                .apply(),
+            AssemblyLine.fromTagName('p', {})
+                .text("palette: " + ColorPalette.get())
+                .apply(),
+            AssemblyLine.fromTagName('p', {})
+                .text("contrast: " + Contrast.get())
+                .apply(),
+            AssemblyLine.fromTagName('p', {})
+                .text("motion: " + Motion.get())
+                .apply(),
+
+            AssemblyLine.fromTagName("hr", {}).apply(),
+
+            AssemblyLine.fromTagName('p', {})
+                .text("viewport: " + Responsive.getViewport())
+                .do(self => Responsive.onViewportChanged(vp => self.textContent = "viewport: " + vp))
+                .apply(),
+            AssemblyLine.fromTagName('p', {})
+                .text("can hover: " + Responsive.canHover())
+                .do(self => Responsive.onHoverChanged(h => self.textContent = "can hover: " + h))
+                .apply(),
+            AssemblyLine.fromTagName('p', {})
+                .text("pointer accuracy: " + Responsive.getPointerAccuracy())
+                .do(self => Responsive.onPointerChanged(pa => self.textContent = "pointer accuracy: " + pa))
+                .apply(),
+        );
+    });

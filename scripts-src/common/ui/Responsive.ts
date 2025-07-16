@@ -8,22 +8,57 @@ namespace Responsive {
 
     // aspect ratio
 
-    /** Type of screen aspect ratio */
-    export enum Viewport {
-        MOBILE_SLIM = "mobile-slim",
-        MOBILE = "mobile",
-        TABLET = "tablet",
-        DESKTOP = "desktop",
-        DESKTOP_WIDE = "desktop-wide"
+    export class Viewport {
+
+        public static readonly DESKTOP_WIDE = new Viewport("desktop-wide", 16, 9);
+        public static readonly DESKTOP = new Viewport("desktop", 4, 3);
+        public static readonly TABLET = new Viewport("tablet", 3, 4);
+        public static readonly MOBILE = new Viewport("mobile", 9, 16);
+        public static readonly MOBILE_SLIM = new Viewport("mobile-slim", 9, 22);
+        public static readonly ALL: Readonly<Viewport[]> = [
+            this.MOBILE_SLIM,
+            this.MOBILE,
+            this.TABLET,
+            this.DESKTOP,
+            this.DESKTOP_WIDE
+        ];
+
+        public readonly name: string;
+        private readonly width: number;
+        private readonly height: number;
+        private get ratio() {
+            return this.width / this.height;
+        }
+
+        public readonly mediaQuery: MediaQueryList;
+
+        private constructor(name: string, width: number, height: number) {
+            this.name = name;
+            this.width = width;
+            this.height = height
+
+            this.mediaQuery = matchMedia(`(max-aspect-ratio: ${width} / ${height})`);
+        }
+
+
+        public isSlimmerThan(other: Viewport): boolean {
+            return this < other;
+        }
+
+        public isWiderThan(other: Viewport): boolean {
+            return this > other;
+        }
+
+        public [Symbol.toPrimitive](hint: string) {
+            return hint === "number" ? this.ratio : this.name;
+        }
+
     }
 
-    const VIEWPORT_ASPECT_RATIOS: Record<Viewport, { width: number, height: number }> = {
-        [Viewport.DESKTOP_WIDE]: { width: 16, height: 9 },
-        [Viewport.DESKTOP]: { width: 4, height: 3 },
-        [Viewport.TABLET]: { width: 3, height: 4 },
-        [Viewport.MOBILE]: { width: 9, height: 16 },
-        [Viewport.MOBILE_SLIM]: { width: 9, height: 22 },
-    };
+    let currentViewport = Viewport.DESKTOP_WIDE;
+    export function getViewport() {
+        return currentViewport;
+    }
 
     type ViewportChangeHandler = (vp: Viewport) => void;
     const viewportChangeHandlers: Set<ViewportChangeHandler> = new Set();
@@ -35,17 +70,18 @@ namespace Responsive {
     Loading.onceDOMContentLoaded()
         .then(() => {
             window.addEventListener("resize", () => {
-                const firstMatch = Object.values(Viewport).find(vp => {
-                    const { width, height } = VIEWPORT_ASPECT_RATIOS[vp];
-                    return matchMedia(`(max-aspect-ratio: ${width} / ${height})`).matches;
-                }) ?? Viewport.DESKTOP_WIDE;
+                const firstMatch = Viewport.ALL.find(vp => vp.mediaQuery.matches) ?? Viewport.DESKTOP_WIDE;
 
-                document.body.setAttribute("viewport", firstMatch);
-                viewportChangeHandlers.forEach(h => h(firstMatch));
+                if (firstMatch !== currentViewport) {
+                    currentViewport = firstMatch;
+                    document.body.setAttribute("viewport", currentViewport.name);
+                    viewportChangeHandlers.forEach(h => h(currentViewport));
+                }
             });
 
             window.dispatchEvent(new Event("resize"));
         });
+
 
     // hover
 
@@ -76,7 +112,8 @@ namespace Responsive {
             });
         });
 
-    // pointer
+
+    // pointer accuracy
 
     /** Accuracy of the main pointer device */
     export enum PointerAccuracy {
@@ -95,7 +132,7 @@ namespace Responsive {
      * Determines the current pointer accuracy.
      * @returns current pointer accuracy
      */
-    export function pointerAccuracy(): PointerAccuracy {
+    export function getPointerAccuracy(): PointerAccuracy {
         return Object.values(PointerAccuracy).find(pa => POINTER_MEDIA_QUERIES[pa].matches) ?? PointerAccuracy.NONE;
     }
 
