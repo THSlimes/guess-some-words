@@ -24,7 +24,12 @@ body {
     justify-content: space-between;
 
     background-color: var(--secondary);
+
+    &:fullscreen::backdrop {
+        background-color: var(--secondary);
+    }
 }
+
 
 header {
     position: relative;

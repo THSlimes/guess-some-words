@@ -70,6 +70,20 @@ Promise.all([ // make header while waiting for page load
                                 loadIcon(PALETTE_ICONS[newPalette])
                                     .then(icon => self.firstChild?.replaceWith(icon));
                             }),
+                        document.fullscreenEnabled && AssemblyLine.fromTagName("button", {})
+                            .id("fullscreen-button")
+                            .phraseTooltip("header.settings.fullscreen")
+                            .children(
+                                loadIcon("fullscreen")
+                            )
+                            .on("click", (_, self) => {
+                                if (document.fullscreenElement) document.exitFullscreen();
+                                else document.body.requestFullscreen({ navigationUI: "hide" });
+                            })
+                            .do(self => document.addEventListener("fullscreenchange", () => {
+                                loadIcon(document.fullscreenElement ? "fullscreen-exit" : "fullscreen")
+                                    .then(icon => self.firstElementChild?.replaceWith(icon))
+                            })),
                         AssemblyLine.fromTagName("button", {})
                             .id("high-contrast-button")
                             .phraseTooltip("header.settings.contrast")

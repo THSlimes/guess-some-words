@@ -13,7 +13,9 @@ export type IconName =
     "trail-length" |
     "trail-length-short" |
     "nl-flag" |
-    "us-flag";
+    "us-flag" |
+    "fullscreen" |
+    "fullscreen-exit";
 
 const parser = new DOMParser();
 

@@ -2,6 +2,7 @@
     "header.settings.language": "Taal",
     "header.settings.colorPalette": "Kleurthema",
     "header.settings.contrast": "Contrast",
+    "header.settings.fullscreen": "Volledig Scherm",
     "header.settings.reducedMotion": "Prikkelarm",
 
     "footer.madeBy": "Gemaakt door"

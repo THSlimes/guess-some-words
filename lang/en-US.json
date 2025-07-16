@@ -2,6 +2,7 @@
     "header.settings.language": "Language",
     "header.settings.colorPalette": "Color Palette",
     "header.settings.contrast": "Contrast",
+    "header.settings.fullscreen": "Fullscreen",
     "header.settings.reducedMotion": "Reduced Motion",
 
     "footer.madeBy": "Made by"
