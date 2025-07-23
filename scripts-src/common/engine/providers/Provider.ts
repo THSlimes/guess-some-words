@@ -1,44 +1,67 @@
-import { getType, Type } from "../types";
+import FunctionUtil from "../../util/FunctionUtil";
+import { BOOLEAN, BOOLEAN_ARRAY, getType, NUMBER, NUMBER_ARRAY, STRING, STRING_ARRAY, Type } from "../types";
+
+type ProviderVar =
+    string | string[] |
+    number | number[] |
+    boolean | boolean[];
+
+interface VarsCollection<T extends ProviderVar> {
+    type: Type<T>, vars: Record<string, T>
+}
+
+type VarSetter<T> = (name: string, value: T) => void;
+type VarGetter<T> = (name: string, defaultTo?: T) => T;
 
 export class ProviderContext {
 
-    private readonly stringVars: Record<string, string> = {};
-    private readonly numberVars: Record<string, number> = {};
-    private readonly booleanVars: Record<string, boolean> = {};
+    private readonly variableCollections: VarsCollection<any>[] = [
+        { type: STRING, vars: {} } as VarsCollection<string>,
+        { type: NUMBER, vars: {} } as VarsCollection<number>,
+        { type: BOOLEAN, vars: {} } as VarsCollection<boolean>,
+        { type: STRING_ARRAY, vars: {} } as VarsCollection<string[]>,
+        { type: NUMBER_ARRAY, vars: {} } as VarsCollection<number[]>,
+        { type: BOOLEAN_ARRAY, vars: {} } as VarsCollection<boolean[]>,
+    ];
 
 
-    public setStringVar(name: string, value: string) {
-        this.stringVars[name] = value;
+    private getVar<T extends ProviderVar>(type: Type<T>, name: string, defaultTo?: T): T {
+        for (const collection of this.variableCollections) {
+            if (collection.type.extends(type)) {
+                const out = collection.vars[name] ?? defaultTo;
+                if (out === undefined) throw new ReferenceError(`undefined ${type.name} variable "${name}"`);
+            }
+        }
+
+        throw new TypeError(`unsupported variable type "${type.name}"`);
     }
 
-    public getStringVar(name: string, defaultTo?: string): string {
-        const out = this.stringVars[name] ?? defaultTo;
 
-        if (out === undefined) throw new ReferenceError(`undefined string variable "${name}"`);
-        else return out;
+    private setVar<T extends ProviderVar>(type: Type<T>, name: string, value: T) {
+        for (const collection of this.variableCollections) {
+            if (collection.type.extends(type)) collection.vars[name] = value;
+        }
+
+        throw new TypeError(`unsupported variable type "${type.name}"`);
     }
 
-    public setNumberVar(name: string, value: number) {
-        this.numberVars[name] = value;
-    }
+    public readonly setStringVar: VarSetter<string> = FunctionUtil.curry(STRING, this.setVar);
+    public readonly getStringVar: VarGetter<string> = FunctionUtil.curry(STRING, this.getVar);
 
-    public getNumberVar(name: string, defaultTo?: number): number {
-        const out = this.numberVars[name] ?? defaultTo;
+    public readonly setNumberVar: VarSetter<number> = FunctionUtil.curry(NUMBER, this.setVar);
+    public readonly getNumberVar: VarGetter<number> = FunctionUtil.curry(NUMBER, this.getVar);
 
-        if (out === undefined) throw new ReferenceError(`undefined string variable "${name}"`);
-        else return out;
-    }
+    public readonly setBooleanVar: VarSetter<boolean> = FunctionUtil.curry(BOOLEAN, this.setVar);
+    public readonly getBooleanVar: VarGetter<boolean> = FunctionUtil.curry(BOOLEAN, this.getVar);
 
-    public setBooleanVar(name: string, value: boolean) {
-        this.booleanVars[name] = value;
-    }
+    public readonly setStringArrayVar: VarSetter<string[]> = FunctionUtil.curry(STRING_ARRAY, this.setVar);
+    public readonly getStringArrayVar: VarGetter<string[]> = FunctionUtil.curry(STRING_ARRAY, this.getVar);
 
-    public getBooleanVar(name: string, defaultTo?: boolean): boolean {
-        const out = this.booleanVars[name] ?? defaultTo;
+    public readonly setNumberArrayVar: VarSetter<number[]> = FunctionUtil.curry(NUMBER_ARRAY, this.setVar);
+    public readonly getNumberArrayVar: VarGetter<number[]> = FunctionUtil.curry(NUMBER_ARRAY, this.getVar);
 
-        if (out === undefined) throw new ReferenceError(`undefined string variable "${name}"`);
-        else return out;
-    }
+    public readonly setBooleanArrayVar: VarSetter<boolean[]> = FunctionUtil.curry(BOOLEAN_ARRAY, this.setVar);
+    public readonly getBooleanArrayVar: VarGetter<boolean[]> = FunctionUtil.curry(BOOLEAN_ARRAY, this.getVar);
 
     /**
      * Makes a deep-copy of this ProviderContext
@@ -47,9 +70,9 @@ export class ProviderContext {
         const out = new ProviderContext();
 
         // copy over variables
-        for (const k in this.stringVars) out.setStringVar(k, this.stringVars[k]);
-        for (const k in this.numberVars) out.setNumberVar(k, this.numberVars[k]);
-        for (const k in this.booleanVars) out.setBooleanVar(k, this.booleanVars[k]);
+        for (let i = 0; i < this.variableCollections.length; i++) { // only works because all variableCollections have the same type order
+            out.variableCollections[i].vars = { ...this.variableCollections[i].vars };
+        }
 
         return out;
     }
@@ -63,9 +86,7 @@ export class ProviderContext {
         for (const k in vars) {
             const v = vars[k];
 
-            if (typeof v === "string") out.setStringVar(k, v);
-            if (typeof v === "number") out.setNumberVar(k, v);
-            if (typeof v === "boolean") out.setBooleanVar(k, v);
+            out.setVar(getType(v), k, v);
         }
 
         return out;

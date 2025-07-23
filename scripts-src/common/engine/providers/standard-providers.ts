@@ -30,6 +30,10 @@ export const ALL_UNARY_PROVIDERS: Record<string, UnaryProviderCollection<any>> =
             return 1 / x;
         }),
     ),
+    abs: new UnaryProviderCollection(
+        "abs",
+        new UnaryProvider(NUMBER, NUMBER, (_, x) => Math.abs(x))
+    ),
     signum: new UnaryProviderCollection(
         "signum",
         new UnaryProvider(NUMBER, NUMBER, (_, x) => Math.sign(x)),
@@ -182,9 +186,9 @@ export const ALL_UNARY_PROVIDERS: Record<string, UnaryProviderCollection<any>> =
         new UnaryProvider(BOOLEAN_ARRAY, BOOLEAN_ARRAY, (_, s) => s.reverse()),
     ),
 
-    // list manipulation
-    list: new UnaryProviderCollection(
-        "list",
+    // array manipulation
+    array: new UnaryProviderCollection(
+        "array",
         new UnaryProvider(STRING, STRING_ARRAY, (_, s) => [s]),
         new UnaryProvider(NUMBER, NUMBER_ARRAY, (_, x) => [x]),
         new UnaryProvider(BOOLEAN, BOOLEAN_ARRAY, (_, b) => [b]),
@@ -282,7 +286,7 @@ export const ALL_UNARY_PROVIDERS: Record<string, UnaryProviderCollection<any>> =
         new UnaryProvider(STRING, NUMBER, (ctx, varName) => {
             const out = ctx.getNumberVar(varName);
 
-            if (out === undefined) throw new ReferenceError(`no string variable named ${JSON.stringify(varName)}`);
+            if (out === undefined) throw new ReferenceError(`no number variable named ${JSON.stringify(varName)}`);
             else return out;
         })
     ),
@@ -291,7 +295,34 @@ export const ALL_UNARY_PROVIDERS: Record<string, UnaryProviderCollection<any>> =
         new UnaryProvider(STRING, BOOLEAN, (ctx, varName) => {
             const out = ctx.getBooleanVar(varName);
 
-            if (out === undefined) throw new ReferenceError(`no string variable named ${JSON.stringify(varName)}`);
+            if (out === undefined) throw new ReferenceError(`no boolean variable named ${JSON.stringify(varName)}`);
+            else return out;
+        })
+    ),
+    "string array variable": new UnaryProviderCollection(
+        "string variable",
+        new UnaryProvider(STRING, STRING_ARRAY, (ctx, varName) => {
+            const out = ctx.getStringArrayVar(varName);
+
+            if (out === undefined) throw new ReferenceError(`no string array variable named ${JSON.stringify(varName)}`);
+            else return out;
+        })
+    ),
+    "number array variable": new UnaryProviderCollection(
+        "number variable",
+        new UnaryProvider(STRING, NUMBER_ARRAY, (ctx, varName) => {
+            const out = ctx.getNumberArrayVar(varName);
+
+            if (out === undefined) throw new ReferenceError(`no number array variable named ${JSON.stringify(varName)}`);
+            else return out;
+        })
+    ),
+    "boolean array variable": new UnaryProviderCollection(
+        "boolean variable",
+        new UnaryProvider(STRING, BOOLEAN_ARRAY, (ctx, varName) => {
+            const out = ctx.getBooleanArrayVar(varName);
+
+            if (out === undefined) throw new ReferenceError(`no boolean array variable named ${JSON.stringify(varName)}`);
             else return out;
         })
     ),
@@ -413,19 +444,19 @@ export const ALL_BINARY_PROVIDERS: Record<string, BinaryProviderCollection<any>>
         "index",
         new BinaryProvider(STRING_ARRAY, NUMBER, STRING, (_, sa, x) => {
             if (x % 1 !== 0) throw new Error(`RHS ${x} is not an integer`);
-            else if (x < 0 || x >= sa.length) throw new RangeError(`index ${x} is out of range for list of length ${sa.length}`);
+            else if (x < 0 || x >= sa.length) throw new RangeError(`index ${x} is out of range for array of length ${sa.length}`);
 
             return sa[x];
         }),
         new BinaryProvider(NUMBER_ARRAY, NUMBER, NUMBER, (_, xs, x) => {
             if (x % 1 !== 0) throw new Error(`RHS ${x} is not an integer`);
-            else if (x < 0 || x >= xs.length) throw new RangeError(`index ${x} is out of range for list of length ${xs.length}`);
+            else if (x < 0 || x >= xs.length) throw new RangeError(`index ${x} is out of range for array of length ${xs.length}`);
 
             return xs[x];
         }),
         new BinaryProvider(BOOLEAN_ARRAY, NUMBER, BOOLEAN, (_, ba, x) => {
             if (x % 1 !== 0) throw new Error(`RHS ${x} is not an integer`);
-            else if (x < 0 || x >= ba.length) throw new RangeError(`index ${x} is out of range for list of length ${ba.length}`);
+            else if (x < 0 || x >= ba.length) throw new RangeError(`index ${x} is out of range for array of length ${ba.length}`);
 
             return ba[x];
         }),

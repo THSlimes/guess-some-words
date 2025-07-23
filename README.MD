@@ -52,6 +52,7 @@ _Unary Providers_ are providers which take a single argument. They are represent
 | ```"negate"```      | Gives the argument's boolean complement                                                            | boolean       | boolean     |
 | ```"negate"```      | Gives the argument's additive inverse                                                              | number        | number      |
 | ```"invert"```      | Gives the argument's multiplicative inverse <br> _Throws an error if the argument is 0_            | number        | number      |
+| ```"abs"```         | Gives the absolute value of the argument                                                           | number        | number      |
 | ```"signum"```      | Gives the argument's signum (-1 for < 0, 0 for 0, or 1 for > 0)                                    | number        | number      |
 | ```"square"```      | Computes the argument's square, $x^2$                                                              | number        | number      |
 | ```"square root"``` | Computes the argument's square root $\sqrt{x}$ <br> _Throws an error if the argument is negative_  | number        | number      |
@@ -103,13 +104,13 @@ _Unary Providers_ are providers which take a single argument. They are represent
 | ```"capitalize all"``` | Capitalizes the first character of every word in the argument string | string        | string      |
 | ```"split"```          | Splits the argument string on every space                            | string        | string[]    |
 
-#### List Manipulation
+#### Array Manipulation
 
 | Name            | Description                                                                              | Argument Type | Return Type |
 | --------------- | ---------------------------------------------------------------------------------------- | ------------- | ----------- |
-| ```"list"```    | Puts the argument in a list                                                              | string        | string[]    |
-| ```"list"```    | Puts the argument in a list                                                              | number        | number[]    |
-| ```"list"```    | Puts the argument in a list                                                              | boolean       | boolean[]   |
+| ```"array"```   | Puts the argument in a array                                                             | string        | string[]    |
+| ```"array"```   | Puts the argument in a array                                                             | number        | number[]    |
+| ```"array"```   | Puts the argument in a array                                                             | boolean       | boolean[]   |
 | ```"length"```  | Gives the argument string's length                                                       | string        | number      |
 | ```"length"```  | Gives the argument string's length                                                       | string        | number      |
 | ```"length"```  | Gives the argument array's length                                                        | string[]      | number      |
@@ -156,11 +157,14 @@ _Unary Providers_ are providers which take a single argument. They are represent
 
 
 #### Context Variables
-| Name                     | Description                                                                                                          | Argument Type | Return Type |
-| ------------------------ | -------------------------------------------------------------------------------------------------------------------- | ------------- | ----------- |
-| ```"string variable"```  | Retrieves a string variable, with the argument being its name <br> _Throws an error if the variable does not exist_  | string        | string      |
-| ```"number variable"```  | Retrieves a number variable, with the argument being its name <br> _Throws an error if the variable does not exist_  | string        | number      |
-| ```"boolean variable"``` | Retrieves a boolean variable, with the argument being its name <br> _Throws an error if the variable does not exist_ | string        | boolean     |
+| Name                           | Description                                                                                                                | Argument Type | Return Type |
+| ------------------------------ | -------------------------------------------------------------------------------------------------------------------------- | ------------- | ----------- |
+| ```"string variable"```        | Retrieves a string variable, with the argument being its name <br> _Throws an error if the variable does not exist_        | string        | string      |
+| ```"number variable"```        | Retrieves a number variable, with the argument being its name <br> _Throws an error if the variable does not exist_        | string        | number      |
+| ```"boolean variable"```       | Retrieves a boolean variable, with the argument being its name <br> _Throws an error if the variable does not exist_       | string        | boolean     |
+| ```"string array variable"```  | Retrieves a string array variable, with the argument being its name <br> _Throws an error if the variable does not exist_  | string        | string      |
+| ```"number array variable"```  | Retrieves a number array variable, with the argument being its name <br> _Throws an error if the variable does not exist_  | string        | number      |
+| ```"boolean array variable"``` | Retrieves a boolean array variable, with the argument being its name <br> _Throws an error if the variable does not exist_ | string        | boolean     |
 
 
 ### Binary Providers
@@ -239,7 +243,7 @@ Some binary providers are _commutative_, meaning that their result will be the s
 | `"less than or equal"`    | Determines whether the LHS comes alphabetically after the RHS, or are equal  | string   | string   | boolean     | ❌           |
 | `"greater than or equal"` | Determines whether `lhs >= rhs`                                              | number   | number   | boolean     | ❌           |
 
-#### List Manipulation
+#### Array Manipulation
 
 | Name      | Description                                                                                                                                         | LHS Type  | RHS Type  | Return Type | Commutative |
 | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | --------- | ----------- | ----------- |
@@ -261,20 +265,20 @@ Some binary providers are _commutative_, meaning that their result will be the s
 
 #### Random Operations
 
-| Name                | Description                                                                                       | LHS Type    | RHS Type | Return Type | Commutative |
-| ------------------- | ------------------------------------------------------------------------------------------------- | ----------- | -------- | ----------- | ----------- |
-| `"pick n"`          | Picks `rhs` items from the `lhs` list <br> _Throws an error if the LHS is empty_                  | string[]    | number   | string[]    | ❌           |
-| `"pick n"`          | Picks `rhs` items from the `lhs` list <br> _Throws an error if the LHS is empty_                  | number[]    | number   | number[]    | ❌           |
-| `"pick n"`          | Picks `rhs` items from the `lhs` list <br> _Throws an error if the LHS is empty_                  | boolean[]   | number   | boolean[]   | ❌           |
-| `"pick n"`          | Picks `rhs` items from the `lhs` list <br> _Throws an error if the LHS is empty_                  | string[][]  | number   | string[][]  | ❌           |
-| `"pick n"`          | Picks `rhs` items from the `lhs` list <br> _Throws an error if the LHS is empty_                  | number[][]  | number   | number[][]  | ❌           |
-| `"pick n"`          | Picks `rhs` items from the `lhs` list <br> _Throws an error if the LHS is empty_                  | boolean[][] | number   | boolean[][] | ❌           |
-| `"pick n returned"` | Picks `rhs` items from the `lhs` list, with duplicates <br> _Throws an error if the LHS is empty_ | string[]    | number   | string[]    | ❌           |
-| `"pick n returned"` | Picks `rhs` items from the `lhs` list, with duplicates <br> _Throws an error if the LHS is empty_ | number[]    | number   | number[]    | ❌           |
-| `"pick n returned"` | Picks `rhs` items from the `lhs` list, with duplicates <br> _Throws an error if the LHS is empty_ | boolean[]   | number   | boolean[]   | ❌           |
-| `"pick n returned"` | Picks `rhs` items from the `lhs` list, with duplicates <br> _Throws an error if the LHS is empty_ | string[][]  | number   | string[][]  | ❌           |
-| `"pick n returned"` | Picks `rhs` items from the `lhs` list, with duplicates <br> _Throws an error if the LHS is empty_ | number[][]  | number   | number[][]  | ❌           |
-| `"pick n returned"` | Picks `rhs` items from the `lhs` list, with duplicates <br> _Throws an error if the LHS is empty_ | boolean[][] | number   | boolean[][] | ❌           |
+| Name                | Description                                                                                        | LHS Type    | RHS Type | Return Type | Commutative |
+| ------------------- | -------------------------------------------------------------------------------------------------- | ----------- | -------- | ----------- | ----------- |
+| `"pick n"`          | Picks `rhs` items from the `lhs` array <br> _Throws an error if the LHS is empty_                  | string[]    | number   | string[]    | ❌           |
+| `"pick n"`          | Picks `rhs` items from the `lhs` array <br> _Throws an error if the LHS is empty_                  | number[]    | number   | number[]    | ❌           |
+| `"pick n"`          | Picks `rhs` items from the `lhs` array <br> _Throws an error if the LHS is empty_                  | boolean[]   | number   | boolean[]   | ❌           |
+| `"pick n"`          | Picks `rhs` items from the `lhs` array <br> _Throws an error if the LHS is empty_                  | string[][]  | number   | string[][]  | ❌           |
+| `"pick n"`          | Picks `rhs` items from the `lhs` array <br> _Throws an error if the LHS is empty_                  | number[][]  | number   | number[][]  | ❌           |
+| `"pick n"`          | Picks `rhs` items from the `lhs` array <br> _Throws an error if the LHS is empty_                  | boolean[][] | number   | boolean[][] | ❌           |
+| `"pick n returned"` | Picks `rhs` items from the `lhs` array, with duplicates <br> _Throws an error if the LHS is empty_ | string[]    | number   | string[]    | ❌           |
+| `"pick n returned"` | Picks `rhs` items from the `lhs` array, with duplicates <br> _Throws an error if the LHS is empty_ | number[]    | number   | number[]    | ❌           |
+| `"pick n returned"` | Picks `rhs` items from the `lhs` array, with duplicates <br> _Throws an error if the LHS is empty_ | boolean[]   | number   | boolean[]   | ❌           |
+| `"pick n returned"` | Picks `rhs` items from the `lhs` array, with duplicates <br> _Throws an error if the LHS is empty_ | string[][]  | number   | string[][]  | ❌           |
+| `"pick n returned"` | Picks `rhs` items from the `lhs` array, with duplicates <br> _Throws an error if the LHS is empty_ | number[][]  | number   | number[][]  | ❌           |
+| `"pick n returned"` | Picks `rhs` items from the `lhs` array, with duplicates <br> _Throws an error if the LHS is empty_ | boolean[][] | number   | boolean[][] | ❌           |
  
 
 ### Ternary Providers
