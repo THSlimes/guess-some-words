@@ -1,5 +1,3 @@
-import Responsive from "./Responsive";
-
 export type IconName =
     "dark-mode" |
     "heart-smile" |
@@ -15,7 +13,23 @@ export type IconName =
     "nl-flag" |
     "us-flag" |
     "fullscreen" |
-    "fullscreen-exit";
+    "fullscreen-exit" |
+    "play-circle" |
+    "speed" |
+    "all-inclusive" |
+    "upload" |
+    "open-in-new" |
+    "tune" |
+    "arrow-left" |
+    "arrow-right" |
+    "delete" |
+    "reset-settings" |
+    "shuffle" |
+    "add-person" |
+    "remove-person" |
+    "close-small" |
+    "check-small" |
+    "hourglass";
 
 const parser = new DOMParser();
 
