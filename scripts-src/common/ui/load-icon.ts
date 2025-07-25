@@ -31,10 +31,12 @@ export type IconName =
     "check-small" |
     "hourglass";
 
+export type IconSize = "24px" | "40px";
+
 const parser = new DOMParser();
 
-export default function loadIcon(name: IconName): Promise<SVGElement> {
-    return fetch(`images/icons/${name}.svg`)
+export default function loadIcon(name: IconName, size: IconSize): Promise<SVGElement> {
+    return fetch(`images/icons/${size}/${name}.svg`)
         .then(res => {
             if (res.ok) return res.text();
             else throw new Error("icon SVG not found");

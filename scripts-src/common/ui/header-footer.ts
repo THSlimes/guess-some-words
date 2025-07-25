@@ -43,69 +43,69 @@ Promise.all([ // make header while waiting for page load
                     .id("settings-dropdown")
                     .class("flex", "rows")
                     .children(
-                        loadIcon("settings"),
+                        loadIcon("settings", "40px"),
                         AssemblyLine.fromTagName("div", {})
                             .class("hr"),
                         AssemblyLine.fromTagName("button", {})
                             .id("language-button")
                             .phraseTooltip("header.settings.language")
                             .children(
-                                loadIcon(LANGUAGE_ICONS[Language.get()])
+                                loadIcon(LANGUAGE_ICONS[Language.get()], "40px")
                             )
                             .on("click", (_, self) => {
                                 const newLanguage = Language.setNext();
 
-                                loadIcon(LANGUAGE_ICONS[newLanguage])
+                                loadIcon(LANGUAGE_ICONS[newLanguage], "40px")
                                     .then(icon => self.firstChild?.replaceWith(icon));
                             }),
                         AssemblyLine.fromTagName("button", {})
                             .id("color-palette-button")
                             .phraseTooltip("header.settings.colorPalette")
                             .children(
-                                loadIcon(PALETTE_ICONS[ColorPalette.get()])
+                                loadIcon(PALETTE_ICONS[ColorPalette.get()], "40px")
                             )
                             .on("click", (_, self) => {
                                 const newPalette = ColorPalette.setNext();
 
-                                loadIcon(PALETTE_ICONS[newPalette])
+                                loadIcon(PALETTE_ICONS[newPalette], "40px")
                                     .then(icon => self.firstChild?.replaceWith(icon));
                             }),
                         document.fullscreenEnabled && AssemblyLine.fromTagName("button", {})
                             .id("fullscreen-button")
                             .phraseTooltip("header.settings.fullscreen")
                             .children(
-                                loadIcon("fullscreen")
+                                loadIcon("fullscreen", "40px")
                             )
                             .on("click", (_, self) => {
                                 if (document.fullscreenElement) document.exitFullscreen();
                                 else document.body.requestFullscreen({ navigationUI: "hide" });
                             })
                             .do(self => document.addEventListener("fullscreenchange", () => {
-                                loadIcon(document.fullscreenElement ? "fullscreen-exit" : "fullscreen")
+                                loadIcon(document.fullscreenElement ? "fullscreen-exit" : "fullscreen", "40px")
                                     .then(icon => self.firstElementChild?.replaceWith(icon))
                             })),
                         AssemblyLine.fromTagName("button", {})
                             .id("high-contrast-button")
                             .phraseTooltip("header.settings.contrast")
                             .children(
-                                loadIcon(CONTRAST_ICONS[Contrast.get()])
+                                loadIcon(CONTRAST_ICONS[Contrast.get()], "40px")
                             )
                             .on("click", (_, self) => {
                                 const newContrast = Contrast.setNext();
 
-                                loadIcon(CONTRAST_ICONS[newContrast])
+                                loadIcon(CONTRAST_ICONS[newContrast], "40px")
                                     .then(icon => self.firstChild?.replaceWith(icon));
                             }),
                         AssemblyLine.fromTagName("button", {})
                             .id("reduced-motion-button")
                             .phraseTooltip("header.settings.reducedMotion")
                             .children(
-                                loadIcon(MOTION_ICONS[Motion.get()])
+                                loadIcon(MOTION_ICONS[Motion.get()], "40px")
                             )
                             .on("click", (_, self) => {
                                 const newMotion = Motion.setNext();
 
-                                loadIcon(MOTION_ICONS[newMotion])
+                                loadIcon(MOTION_ICONS[newMotion], "40px")
                                     .then(icon => self.firstChild?.replaceWith(icon));
                             }),
                     )
