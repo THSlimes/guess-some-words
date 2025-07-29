@@ -5,5 +5,14 @@
     "header.settings.fullscreen": "Fullscreen",
     "header.settings.reducedMotion": "Reduced Motion",
 
-    "footer.madeBy": "Made by •"
+    "footer.madeBy": "Made by •",
+
+    "index.presets.heading": "Pick a Game Mode",
+    "index.presets.classic": "Classic",
+    "index.presets.speedrun": "Speedrun",
+    "index.presets.endless": "Endless",
+
+    "index.custom.heading": "Create Your Own",
+    "index.custom.upload": "Upload",
+    "index.presets.docs": "Docs"
 }

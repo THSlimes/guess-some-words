@@ -1,18 +1,26 @@
+import { ProviderContext } from "../../engine/providers/Provider";
 import AssemblyLine from "../AssemblyLine";
 import loadIcon from "../load-icon";
+import Language from "../settings/Language";
 
-interface LinkButtonCtx { text: string, href: string | URL };
+type LinkButtonCtx =
+    { text: string, href: string | URL } |
+    { dictKey: string, href: string | URL };
 
 export const LINK_BUTTON = AssemblyLine.fromTagName<"button", LinkButtonCtx>("button", { text: "button", href: '/' })
     .class("link-button")
     .children(
         (_, ctx) => {
-            if ("text" in ctx) {
+            if ("dictKey" in ctx) {
+                const out = document.createElement("h3");
+                Language.MANAGER_PROMISE.then(manager => manager.registerTextContent(ctx.dictKey, new ProviderContext(), out));
+                return out;
+            }
+            else {
                 const out = document.createElement("h3");
                 out.textContent = ctx.text;
                 return out;
             }
-            else return null;
         },
         loadIcon("open-in-new", "24px")
     )

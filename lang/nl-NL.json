@@ -5,5 +5,14 @@
     "header.settings.fullscreen": "Volledig Scherm",
     "header.settings.reducedMotion": "Prikkelarm",
 
-    "footer.madeBy": "Gemaakt door •"
+    "footer.madeBy": "Gemaakt door •",
+
+    "index.presets.heading": "Kies een Speelmodus",
+    "index.presets.classic": "Classic",
+    "index.presets.speedrun": "Speedrun",
+    "index.presets.endless": "Endless",
+
+    "index.custom.heading": "Maak er Zelf Eentje",
+    "index.custom.upload": "Upload",
+    "index.presets.docs": "Handleiding"
 }

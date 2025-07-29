@@ -1,3 +1,4 @@
+import { ProviderContext } from "../../engine/providers/Provider";
 import { loadTranslations } from "../../localization/deserialize-translations";
 import Dictionary from "../../localization/Dictionary";
 import PhraseManager from "../../localization/PhraseManager";
@@ -81,6 +82,28 @@ namespace Language {
 
     if (isLanguage(savedLanguage)) set(savedLanguage);
     else set(ALL_LANGUAGES.find(lang => localeMatchScore(lang, navigator.language) > 0) ?? DEFAULT_LANGUAGE);
+
+
+
+    // watch for elements with *-dict-key attributes
+    const EMPTY_CTX = new ProviderContext();
+    const ATTR_VALUE_APPLIERS: Record<string, (dictKey: string, element: HTMLElement) => void> = {
+        "text-dict-key": (dictKey, element) => MANAGER_PROMISE
+            .then(manager => manager.registerTextContent(dictKey, EMPTY_CTX, element)),
+        "title-dict-key": (dictKey, element) => MANAGER_PROMISE
+            .then(manager => manager.registerTitle(dictKey, EMPTY_CTX, element))
+    };
+
+    Loading.onceDOMContentLoaded()
+        .then(() => {
+            for (const attrName in ATTR_VALUE_APPLIERS) {
+                const elements = Array.from(document.querySelectorAll(`*[${attrName}]`)).filter(e => e instanceof HTMLElement);
+                elements.forEach(elem => {
+                    const attrValue = elem.getAttribute(attrName);
+                    if (attrValue) ATTR_VALUE_APPLIERS[attrName](attrValue, elem);
+                });
+            }
+        });
 
 }
 

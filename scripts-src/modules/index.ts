@@ -8,32 +8,32 @@ import "../common/ui/header-footer";
 const REPOSITORY_URL = "https://github.com/THSlimes/guess-some-words";
 
 Loading.onceDOMContentLoaded()
-    .then(() => { // preset gamemodes menu
+    .then(() => { // preset game modes menu
         Placeholder.replaceWith("classic-mode-button", BUTTON.apply({
-            text: "Classic",
+            dictKey: "index.presets.classic",
             icon: "play-circle"
         }));
 
         Placeholder.replaceWith("speedrun-mode-button", BUTTON.apply({
-            text: "Speedrun",
+            dictKey: "index.presets.speedrun",
             icon: "speed"
         }));
 
         Placeholder.replaceWith("endless-mode-button", BUTTON.apply({
-            text: "Endless",
+            dictKey: "index.presets.endless",
             icon: "all-inclusive"
         }));
     });
 
 Loading.onceDOMContentLoaded()
-    .then(() => { // preset gamemodes menu
+    .then(() => { // preset game modes menu
         Placeholder.replaceWith("upload-game-mode-button", BUTTON.apply({
-            text: "Classic",
-            icon: "play-circle"
+            dictKey: "index.custom.upload",
+            icon: "upload"
         }));
 
         Placeholder.replaceWith("docs-button", LINK_BUTTON.apply({
-            text: "Docs",
+            dictKey: "index.presets.docs",
             href: REPOSITORY_URL
         }));
     });
