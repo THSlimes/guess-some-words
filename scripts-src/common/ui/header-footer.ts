@@ -140,6 +140,7 @@ Promise.all([ // make header while waiting for page load
                 AssemblyLine.fromTagName('a', {})
                     .text("THSlimes")
                     .attr("href", "https://github.com/THSlimes")
+                    .attr("target", "_blank")
             )
             .apply()
     )(),
@@ -151,42 +152,42 @@ Promise.all([ // make header while waiting for page load
 
 
 
-// DEBUG
+// // DEBUG
 
-Loading.onceDOMContentLoaded()
-    .then(() => Loading.getElementById("panel", HTMLDivElement))
-    .then(panel => {
-        panel.append(
-            AssemblyLine.fromTagName('p', {})
-                .text("language: " + Language.get())
-                .apply(),
-            AssemblyLine.fromTagName('p', {})
-                .text("palette: " + ColorPalette.get())
-                .apply(),
-            AssemblyLine.fromTagName('p', {})
-                .text("contrast: " + Contrast.get())
-                .apply(),
-            AssemblyLine.fromTagName('p', {})
-                .text("motion: " + Motion.get())
-                .apply(),
+// Loading.onceDOMContentLoaded()
+//     .then(() => Loading.getElementById("panel", HTMLDivElement))
+//     .then(panel => {
+//         panel.append(
+//             AssemblyLine.fromTagName('p', {})
+//                 .text("language: " + Language.get())
+//                 .apply(),
+//             AssemblyLine.fromTagName('p', {})
+//                 .text("palette: " + ColorPalette.get())
+//                 .apply(),
+//             AssemblyLine.fromTagName('p', {})
+//                 .text("contrast: " + Contrast.get())
+//                 .apply(),
+//             AssemblyLine.fromTagName('p', {})
+//                 .text("motion: " + Motion.get())
+//                 .apply(),
 
-            AssemblyLine.fromTagName("hr", {}).apply(),
+//             AssemblyLine.fromTagName("hr", {}).apply(),
 
-            AssemblyLine.fromTagName('p', {})
-                .text("viewport: " + Responsive.getViewport())
-                .do(self => Responsive.onViewportChanged(vp => self.textContent = "viewport: " + vp))
-                .apply(),
-            AssemblyLine.fromTagName('p', {})
-                .text("can hover: " + Responsive.canHover())
-                .do(self => Responsive.onHoverChanged(h => self.textContent = "can hover: " + h))
-                .apply(),
-            AssemblyLine.fromTagName('p', {})
-                .text("pointer accuracy: " + Responsive.getPointerAccuracy())
-                .do(self => Responsive.onPointerChanged(pa => self.textContent = "pointer accuracy: " + pa))
-                .apply(),
-            AssemblyLine.fromTagName('p', {})
-                .text("resolution: " + Responsive.getResolution())
-                .do(self => Responsive.onResolutionChanged(r => self.textContent = "resolution: " + r))
-                .apply(),
-        );
-    });
+//             AssemblyLine.fromTagName('p', {})
+//                 .text("viewport: " + Responsive.getViewport())
+//                 .do(self => Responsive.onViewportChanged(vp => self.textContent = "viewport: " + vp))
+//                 .apply(),
+//             AssemblyLine.fromTagName('p', {})
+//                 .text("can hover: " + Responsive.canHover())
+//                 .do(self => Responsive.onHoverChanged(h => self.textContent = "can hover: " + h))
+//                 .apply(),
+//             AssemblyLine.fromTagName('p', {})
+//                 .text("pointer accuracy: " + Responsive.getPointerAccuracy())
+//                 .do(self => Responsive.onPointerChanged(pa => self.textContent = "pointer accuracy: " + pa))
+//                 .apply(),
+//             AssemblyLine.fromTagName('p', {})
+//                 .text("resolution: " + Responsive.getResolution())
+//                 .do(self => Responsive.onResolutionChanged(r => self.textContent = "resolution: " + r))
+//                 .apply(),
+//         );
+//     });

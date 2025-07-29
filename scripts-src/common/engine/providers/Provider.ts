@@ -1,4 +1,5 @@
 import FunctionUtil from "../../util/FunctionUtil";
+import ObjectUtil from "../../util/ObjectUtil";
 import { BOOLEAN, BOOLEAN_ARRAY, getType, NUMBER, NUMBER_ARRAY, STRING, STRING_ARRAY, Type } from "../types";
 
 type ProviderVar =
@@ -10,7 +11,7 @@ interface VarsCollection<T extends ProviderVar> {
     type: Type<T>, vars: Record<string, T>
 }
 
-type VarSetter<T> = (name: string, value: T) => void;
+type VarSetter<T> = (name: string, value: T) => ProviderContext;
 type VarGetter<T> = (name: string, defaultTo?: T) => T;
 
 export class ProviderContext {
@@ -37,9 +38,12 @@ export class ProviderContext {
     }
 
 
-    private setVar<T extends ProviderVar>(type: Type<T>, name: string, value: T) {
+    private setVar<T extends ProviderVar>(type: Type<T>, name: string, value: T): this {
         for (const collection of this.variableCollections) {
-            if (collection.type.extends(type)) collection.vars[name] = value;
+            if (collection.type.extends(type)) {
+                collection.vars[name] = value;
+                return this;
+            }
         }
 
         throw new TypeError(`unsupported variable type "${type.name}"`);
@@ -70,8 +74,9 @@ export class ProviderContext {
         const out = new ProviderContext();
 
         // copy over variables
-        for (let i = 0; i < this.variableCollections.length; i++) { // only works because all variableCollections have the same type order
-            out.variableCollections[i].vars = { ...this.variableCollections[i].vars };
+        for (let i = 0; i < this.variableCollections.length; i++) {
+            // only works because all variableCollections have the same type order
+            out.variableCollections[i].vars = ObjectUtil.deepCopy(this.variableCollections[i].vars);
         }
 
         return out;
@@ -79,13 +84,12 @@ export class ProviderContext {
 
 
 
-    public static fromVars(vars: Record<string, string | number | boolean>): ProviderContext {
+    public static fromVars(vars: Record<string, ProviderVar>): ProviderContext {
         const out = new ProviderContext();
 
         // copy over variables
         for (const k in vars) {
             const v = vars[k];
-
             out.setVar(getType(v), k, v);
         }
 

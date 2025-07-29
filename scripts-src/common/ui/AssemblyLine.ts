@@ -78,7 +78,7 @@ class AssemblyLine<E extends HTMLElement, Ctx> {
                 .then(attrName => {
                     if (attrName) { // falsy values are ignored
                         if (value) {
-                            AssemblyLine.DynValue.resolve(attrName, e, ctx)
+                            AssemblyLine.DynValue.resolve(value, e, ctx)
                                 .then(attrValue => {
                                     if (attrValue != null) e.setAttribute(attrName, attrValue);
                                 });

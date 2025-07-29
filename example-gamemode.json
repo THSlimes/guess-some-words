@@ -1,16 +1,5 @@
 {
+    "version": 1,
     "title": "Example Gamemode",
-    "description": "This is an example gamemode.",
-    "wordPicker": {
-        "name": "join",
-        "lhs": "a",
-        "rhs": {
-            "name": "pick",
-            "arg": [
-                "b",
-                "c",
-                "d"
-            ]
-        }
-    }
+    "description": "This is an example gamemode."
 }

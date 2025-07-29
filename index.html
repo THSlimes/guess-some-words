@@ -3,8 +3,9 @@
 
 <head>
     <!-- prefetch fonts -->
-    <link rel="prefetch" href="https://fonts.googleapis.com/css2?family=Didact+Gothic&family=Reem+Kufi:wght@400..700&display=swap">
-    
+    <link rel="prefetch"
+        href="https://fonts.googleapis.com/css2?family=Didact+Gothic&family=Reem+Kufi:wght@400..700&display=swap">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 
@@ -87,8 +88,22 @@
         document.body.setAttribute("palette", localStorage.getItem("palette") ?? "default-light");
     </script>
 
-    <div id="content" class="flex rows">
-        <div id="panel"></div>
+    <div id="game-mode-menu" class="content flex columns">
+        <div class="panel flex center rows" id="game-mode-presets">
+            <h1>Pick a Game Mode</h1>
+            <div class="flex columns small-gap">
+                <placeholder id="classic-mode-button"></placeholder>
+                <placeholder id="speedrun-mode-button"></placeholder>
+                <placeholder id="endless-mode-button"></placeholder>
+            </div>
+        </div>
+        <div class="panel flex center rows" id="game-mode-custom">
+            <h1>Create Your Own</h1>
+            <div class="flex columns small-gap">
+                <placeholder id="upload-game-mode-button"></placeholder>
+                <placeholder id="docs-button"></placeholder>
+            </div>
+        </div>
     </div>
 
 </body>

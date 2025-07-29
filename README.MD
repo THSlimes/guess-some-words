@@ -18,7 +18,7 @@ Providers always operate within a specific _context_. This context contains info
 
 ### Nullary Providers
 
-_Nullary providers_ are providers which do not take any arguments. They usually return values related to system information or constant values. They are represented by a JSON object containing only a string ```name``` property, or by a literal value: ```{ "name": "timestamp }```, ```"Hello World!"``` or ```[1, 2, 3]```.
+_Nullary providers_ are providers which do not take any arguments. They usually return values related to system information or constant values. They are represented by a JSON object containing only a string ```name``` property, or by a literal value: ```{ "name": "timestamp" }```, ```"Hello World!"``` or ```[1, 2, 3]```.
 
 | Name                   | Description                                 | Return Type |
 | ---------------------- | ------------------------------------------- | ----------- |
@@ -85,61 +85,61 @@ _Unary Providers_ are providers which take a single argument. They are represent
 
 #### Random Operations
 
-| Name            | Description                                          | Argument Type | Return Type |
-| --------------- | ---------------------------------------------------- | ------------- | ----------- |
-| ```"pick"```    | Randomly picks a string from the argument array      | string[]      | string      |
-| ```"pick"```    | Randomly picks a number from the argument array      | number[]      | number      |
-| ```"pick"```    | Randomly picks a boolean from the argument array     | boolean[]     | boolean     |
-| ```"shuffle"``` | Puts the argument array's elements in a random order | string[]      | string[]    |
-| ```"shuffle"``` | Puts the argument array's elements in a random order | number[]      | number[]    |
-| ```"shuffle"``` | Puts the argument array's elements in a random order | boolean[]     | boolean[]   |
+| Name            | Description                                          | Argument Type | Return Type   |
+| --------------- | ---------------------------------------------------- | ------------- | ------------- |
+| ```"pick"```    | Randomly picks a string from the argument array      | string array  | string        |
+| ```"pick"```    | Randomly picks a number from the argument array      | number array  | number        |
+| ```"pick"```    | Randomly picks a boolean from the argument array     | boolean array | boolean       |
+| ```"shuffle"``` | Puts the argument array's elements in a random order | string array  | string array  |
+| ```"shuffle"``` | Puts the argument array's elements in a random order | number array  | number array  |
+| ```"shuffle"``` | Puts the argument array's elements in a random order | boolean array | boolean array |
 
 #### String Manipulation
 
-| Name                   | Description                                                          | Argument Type | Return Type |
-| ---------------------- | -------------------------------------------------------------------- | ------------- | ----------- |
-| ```"lowercase"```      | Converts the argument string to lowercase                            | string        | string      |
-| ```"uppercase"```      | Converts the argument string to uppercase                            | string        | string      |
-| ```"capitalize"```     | Capitalizes the first character of the argument string               | string        | string      |
-| ```"capitalize all"``` | Capitalizes the first character of every word in the argument string | string        | string      |
-| ```"split"```          | Splits the argument string on every space                            | string        | string[]    |
+| Name                   | Description                                                          | Argument Type | Return Type  |
+| ---------------------- | -------------------------------------------------------------------- | ------------- | ------------ |
+| ```"lowercase"```      | Converts the argument string to lowercase                            | string        | string       |
+| ```"uppercase"```      | Converts the argument string to uppercase                            | string        | string       |
+| ```"capitalize"```     | Capitalizes the first character of the argument string               | string        | string       |
+| ```"capitalize all"``` | Capitalizes the first character of every word in the argument string | string        | string       |
+| ```"split"```          | Splits the argument string on every space                            | string        | string array |
 
 #### Array Manipulation
 
-| Name            | Description                                                                              | Argument Type | Return Type |
-| --------------- | ---------------------------------------------------------------------------------------- | ------------- | ----------- |
-| ```"array"```   | Puts the argument in a array                                                             | string        | string[]    |
-| ```"array"```   | Puts the argument in a array                                                             | number        | number[]    |
-| ```"array"```   | Puts the argument in a array                                                             | boolean       | boolean[]   |
-| ```"length"```  | Gives the argument string's length                                                       | string        | number      |
-| ```"length"```  | Gives the argument string's length                                                       | string        | number      |
-| ```"length"```  | Gives the argument array's length                                                        | string[]      | number      |
-| ```"length"```  | Gives the argument array's length                                                        | number[]      | number      |
-| ```"length"```  | Gives the argument array's length                                                        | boolean[]     | number      |
-| ```"reverse"``` | Reverses the argument string                                                             | string        | string      |
-| ```"reverse"``` | Reverses the argument array                                                              | string[]      | string[]    |
-| ```"reverse"``` | Reverses the argument array                                                              | number[]      | number[]    |
-| ```"reverse"``` | Reverses the argument array                                                              | boolean[]     | boolean[]   |
-| ```"sort"```    | Sorts the argument array alphabetically                                                  | string[]      | string[]    |
-| ```"sort"```    | Sorts the argument array from smallest to largest                                        | number[]      | number[]    |
-| ```"sort"```    | Sorts the argument array (`false` first, then `true`)                                    | boolean[]     | boolean[]   |
-| ```"head"```    | Gives the argument string's first character                                              | string        | string      |
-| ```"head"```    | Gives the argument array's first element <br> _An error is thrown if the array is empty_ | string[]      | string      |
-| ```"head"```    | Gives the argument array's first element <br> _An error is thrown if the array is empty_ | number[]      | number      |
-| ```"head"```    | Gives the argument array's first element <br> _An error is thrown if the array is empty_ | boolean[]     | boolean     |
-| ```"last"```    | Gives the argument string's last character                                               | string        | string      |
-| ```"last"```    | Gives the argument array's last element <br> _An error is thrown if the array is empty_  | string[]      | string      |
-| ```"last"```    | Gives the argument array's last element <br> _An error is thrown if the array is empty_  | number[]      | number      |
-| ```"last"```    | Gives the argument array's last element <br> _An error is thrown if the array is empty_  | boolean[]     | boolean     |
-| ```"init"```    | Gives the argument string, except for the last character                                 | string        | string      |
-| ```"init"```    | Gives the argument array, except for the last element                                    | string[]      | string[]    |
-| ```"init"```    | Gives the argument array, except for the last element                                    | number[]      | number[]    |
-| ```"init"```    | Gives the argument array, except for the last element                                    | boolean[]     | boolean[]   |
-| ```"tail"```    | Gives the argument string, except for the first character                                | string        | string      |
-| ```"tail"```    | Gives the argument array, except for the first element                                   | string[]      | string[]    |
-| ```"tail"```    | Gives the argument array, except for the first element                                   | number[]      | number[]    |
-| ```"tail"```    | Gives the argument array, except for the first element                                   | boolean[]     | boolean[]   |
-| ```"join"```    | Joins together the arrays elements                                                       | string[]      | string      |
+| Name            | Description                                                                              | Argument Type | Return Type   |
+| --------------- | ---------------------------------------------------------------------------------------- | ------------- | ------------- |
+| ```"array"```   | Puts the argument in a array                                                             | string        | string array  |
+| ```"array"```   | Puts the argument in a array                                                             | number        | number array  |
+| ```"array"```   | Puts the argument in a array                                                             | boolean       | boolean array |
+| ```"length"```  | Gives the argument string's length                                                       | string        | number        |
+| ```"length"```  | Gives the argument string's length                                                       | string        | number        |
+| ```"length"```  | Gives the argument array's length                                                        | string array  | number        |
+| ```"length"```  | Gives the argument array's length                                                        | number array  | number        |
+| ```"length"```  | Gives the argument array's length                                                        | boolean array | number        |
+| ```"reverse"``` | Reverses the argument string                                                             | string        | string        |
+| ```"reverse"``` | Reverses the argument array                                                              | string array  | string array  |
+| ```"reverse"``` | Reverses the argument array                                                              | number array  | number array  |
+| ```"reverse"``` | Reverses the argument array                                                              | boolean array | boolean array |
+| ```"sort"```    | Sorts the argument array alphabetically                                                  | string array  | string array  |
+| ```"sort"```    | Sorts the argument array from smallest to largest                                        | number array  | number array  |
+| ```"sort"```    | Sorts the argument array (`false` first, then `true`)                                    | boolean array | boolean array |
+| ```"head"```    | Gives the argument string's first character                                              | string        | string        |
+| ```"head"```    | Gives the argument array's first element <br> _An error is thrown if the array is empty_ | string array  | string        |
+| ```"head"```    | Gives the argument array's first element <br> _An error is thrown if the array is empty_ | number array  | number        |
+| ```"head"```    | Gives the argument array's first element <br> _An error is thrown if the array is empty_ | boolean array | boolean       |
+| ```"last"```    | Gives the argument string's last character                                               | string        | string        |
+| ```"last"```    | Gives the argument array's last element <br> _An error is thrown if the array is empty_  | string array  | string        |
+| ```"last"```    | Gives the argument array's last element <br> _An error is thrown if the array is empty_  | number array  | number        |
+| ```"last"```    | Gives the argument array's last element <br> _An error is thrown if the array is empty_  | boolean array | boolean       |
+| ```"init"```    | Gives the argument string, except for the last character                                 | string        | string        |
+| ```"init"```    | Gives the argument array, except for the last element                                    | string array  | string array  |
+| ```"init"```    | Gives the argument array, except for the last element                                    | number array  | number array  |
+| ```"init"```    | Gives the argument array, except for the last element                                    | boolean array | boolean array |
+| ```"tail"```    | Gives the argument string, except for the first character                                | string        | string        |
+| ```"tail"```    | Gives the argument array, except for the first element                                   | string array  | string array  |
+| ```"tail"```    | Gives the argument array, except for the first element                                   | number array  | number array  |
+| ```"tail"```    | Gives the argument array, except for the first element                                   | boolean array | boolean array |
+| ```"join"```    | Joins together the arrays elements                                                       | string array  | string        |
 
 #### Type Conversion
 
@@ -245,40 +245,40 @@ Some binary providers are _commutative_, meaning that their result will be the s
 
 #### Array Manipulation
 
-| Name      | Description                                                                                                                                         | LHS Type  | RHS Type  | Return Type | Commutative |
-| --------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | --------- | ----------- | ----------- |
-| `"index"` | Gets an element from the LHS at the RHS index <br> _Throws an error if the RHS is not an integer_ <br> _Throws an error if the RHS is out of range_ | string[]  | number    | string      | ❌           |
-| `"index"` | Gets an element from the LHS at the RHS index <br> _Throws an error if the RHS is not an integer_ <br> _Throws an error if the RHS is out of range_ | number[]  | number    | number      | ❌           |
-| `"index"` | Gets an element from the LHS at the RHS index <br> _Throws an error if the RHS is not an integer_ <br> _Throws an error if the RHS is out of range_ | boolean[] | number    | boolean     | ❌           |
-| `"join"`  | Puts the arguments in an array                                                                                                                      | string    | string    | string[]    | ❌           |
-| `"join"`  | Puts the LHS in front of the elements of the RHS                                                                                                    | string    | string[]  | string[]    | ❌           |
-| `"join"`  | Puts the elements of the LHS in front of the RHS                                                                                                    | string[]  | string    | string[]    | ❌           |
-| `"join"`  | Puts the elements of the LHS in front of the elements of the RHS                                                                                    | string[]  | string[]  | string[]    | ❌           |
-| `"join"`  | Puts the arguments in an array                                                                                                                      | number    | number    | number[]    | ❌           |
-| `"join"`  | Puts the LHS in front of the elements of the RHS                                                                                                    | number    | number[]  | number[]    | ❌           |
-| `"join"`  | Puts the elements of the LHS in front of the RHS                                                                                                    | number[]  | number    | number[]    | ❌           |
-| `"join"`  | Puts the elements of the LHS in front of the elements of the RHS                                                                                    | number[]  | number[]  | number[]    | ❌           |
-| `"join"`  | Puts the arguments in an array                                                                                                                      | boolean   | boolean   | boolean[]   | ❌           |
-| `"join"`  | Puts the LHS in front of the elements of the RHS                                                                                                    | boolean   | boolean[] | boolean[]   | ❌           |
-| `"join"`  | Puts the elements of the LHS in front of the RHS                                                                                                    | boolean[] | boolean   | boolean[]   | ❌           |
-| `"join"`  | Puts the elements of the LHS in front of the elements of the RHS                                                                                    | boolean[] | boolean[] | boolean[]   | ❌           |
+| Name      | Description                                                                                                                                         | LHS Type      | RHS Type      | Return Type   | Commutative |
+| --------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- | ------------- | ------------- | ----------- |
+| `"index"` | Gets an element from the LHS at the RHS index <br> _Throws an error if the RHS is not an integer_ <br> _Throws an error if the RHS is out of range_ | string array  | number        | string        | ❌           |
+| `"index"` | Gets an element from the LHS at the RHS index <br> _Throws an error if the RHS is not an integer_ <br> _Throws an error if the RHS is out of range_ | number array  | number        | number        | ❌           |
+| `"index"` | Gets an element from the LHS at the RHS index <br> _Throws an error if the RHS is not an integer_ <br> _Throws an error if the RHS is out of range_ | boolean array | number        | boolean       | ❌           |
+| `"join"`  | Puts the arguments in an array                                                                                                                      | string        | string        | string array  | ❌           |
+| `"join"`  | Puts the LHS in front of the elements of the RHS                                                                                                    | string        | string array  | string array  | ❌           |
+| `"join"`  | Puts the elements of the LHS in front of the RHS                                                                                                    | string array  | string        | string array  | ❌           |
+| `"join"`  | Puts the elements of the LHS in front of the elements of the RHS                                                                                    | string array  | string array  | string array  | ❌           |
+| `"join"`  | Puts the arguments in an array                                                                                                                      | number        | number        | number array  | ❌           |
+| `"join"`  | Puts the LHS in front of the elements of the RHS                                                                                                    | number        | number array  | number array  | ❌           |
+| `"join"`  | Puts the elements of the LHS in front of the RHS                                                                                                    | number array  | number        | number array  | ❌           |
+| `"join"`  | Puts the elements of the LHS in front of the elements of the RHS                                                                                    | number array  | number array  | number array  | ❌           |
+| `"join"`  | Puts the arguments in an array                                                                                                                      | boolean       | boolean       | boolean array | ❌           |
+| `"join"`  | Puts the LHS in front of the elements of the RHS                                                                                                    | boolean       | boolean array | boolean array | ❌           |
+| `"join"`  | Puts the elements of the LHS in front of the RHS                                                                                                    | boolean array | boolean       | boolean array | ❌           |
+| `"join"`  | Puts the elements of the LHS in front of the elements of the RHS                                                                                    | boolean array | boolean array | boolean array | ❌           |
 
 #### Random Operations
 
-| Name                | Description                                                                                        | LHS Type    | RHS Type | Return Type | Commutative |
-| ------------------- | -------------------------------------------------------------------------------------------------- | ----------- | -------- | ----------- | ----------- |
-| `"pick n"`          | Picks `rhs` items from the `lhs` array <br> _Throws an error if the LHS is empty_                  | string[]    | number   | string[]    | ❌           |
-| `"pick n"`          | Picks `rhs` items from the `lhs` array <br> _Throws an error if the LHS is empty_                  | number[]    | number   | number[]    | ❌           |
-| `"pick n"`          | Picks `rhs` items from the `lhs` array <br> _Throws an error if the LHS is empty_                  | boolean[]   | number   | boolean[]   | ❌           |
-| `"pick n"`          | Picks `rhs` items from the `lhs` array <br> _Throws an error if the LHS is empty_                  | string[][]  | number   | string[][]  | ❌           |
-| `"pick n"`          | Picks `rhs` items from the `lhs` array <br> _Throws an error if the LHS is empty_                  | number[][]  | number   | number[][]  | ❌           |
-| `"pick n"`          | Picks `rhs` items from the `lhs` array <br> _Throws an error if the LHS is empty_                  | boolean[][] | number   | boolean[][] | ❌           |
-| `"pick n returned"` | Picks `rhs` items from the `lhs` array, with duplicates <br> _Throws an error if the LHS is empty_ | string[]    | number   | string[]    | ❌           |
-| `"pick n returned"` | Picks `rhs` items from the `lhs` array, with duplicates <br> _Throws an error if the LHS is empty_ | number[]    | number   | number[]    | ❌           |
-| `"pick n returned"` | Picks `rhs` items from the `lhs` array, with duplicates <br> _Throws an error if the LHS is empty_ | boolean[]   | number   | boolean[]   | ❌           |
-| `"pick n returned"` | Picks `rhs` items from the `lhs` array, with duplicates <br> _Throws an error if the LHS is empty_ | string[][]  | number   | string[][]  | ❌           |
-| `"pick n returned"` | Picks `rhs` items from the `lhs` array, with duplicates <br> _Throws an error if the LHS is empty_ | number[][]  | number   | number[][]  | ❌           |
-| `"pick n returned"` | Picks `rhs` items from the `lhs` array, with duplicates <br> _Throws an error if the LHS is empty_ | boolean[][] | number   | boolean[][] | ❌           |
+| Name                | Description                                                                                        | LHS Type            | RHS Type | Return Type         | Commutative |
+| ------------------- | -------------------------------------------------------------------------------------------------- | ------------------- | -------- | ------------------- | ----------- |
+| `"pick n"`          | Picks `rhs` items from the `lhs` array <br> _Throws an error if the LHS is empty_                  | string array        | number   | string array        | ❌           |
+| `"pick n"`          | Picks `rhs` items from the `lhs` array <br> _Throws an error if the LHS is empty_                  | number array        | number   | number array        | ❌           |
+| `"pick n"`          | Picks `rhs` items from the `lhs` array <br> _Throws an error if the LHS is empty_                  | boolean array       | number   | boolean array       | ❌           |
+| `"pick n"`          | Picks `rhs` items from the `lhs` array <br> _Throws an error if the LHS is empty_                  | string array array  | number   | string array array  | ❌           |
+| `"pick n"`          | Picks `rhs` items from the `lhs` array <br> _Throws an error if the LHS is empty_                  | number array array  | number   | number array array  | ❌           |
+| `"pick n"`          | Picks `rhs` items from the `lhs` array <br> _Throws an error if the LHS is empty_                  | boolean array array | number   | boolean array array | ❌           |
+| `"pick n returned"` | Picks `rhs` items from the `lhs` array, with duplicates <br> _Throws an error if the LHS is empty_ | string array        | number   | string array        | ❌           |
+| `"pick n returned"` | Picks `rhs` items from the `lhs` array, with duplicates <br> _Throws an error if the LHS is empty_ | number array        | number   | number array        | ❌           |
+| `"pick n returned"` | Picks `rhs` items from the `lhs` array, with duplicates <br> _Throws an error if the LHS is empty_ | boolean array       | number   | boolean array       | ❌           |
+| `"pick n returned"` | Picks `rhs` items from the `lhs` array, with duplicates <br> _Throws an error if the LHS is empty_ | string array array  | number   | string array array  | ❌           |
+| `"pick n returned"` | Picks `rhs` items from the `lhs` array, with duplicates <br> _Throws an error if the LHS is empty_ | number array array  | number   | number array array  | ❌           |
+| `"pick n returned"` | Picks `rhs` items from the `lhs` array, with duplicates <br> _Throws an error if the LHS is empty_ | boolean array array | number   | boolean array array | ❌           |
  
 
 ### Ternary Providers
@@ -299,3 +299,116 @@ _Ternary Providers_ are providers which take three arguments. They are represent
 | `"conditional"` | Gives `b` is `a` is `true`, `c` otherwise | boolean | string  | string  | string      |
 | `"conditional"` | Gives `b` is `a` is `true`, `c` otherwise | boolean | number  | number  | number      |
 | `"conditional"` | Gives `b` is `a` is `true`, `c` otherwise | boolean | boolean | boolean | boolean     |
+
+
+
+## Games
+
+TODO: write section about games
+- game divided into turns
+- players divided into teams
+  - teams have points
+
+
+
+## Game Modes
+
+A _game mode_ is a configuration which determines the behavior and flow of a _game_. Guess Some Words allows for the customization of games using user-defined game modes. Such custom game modes are provided using a specific JSON format the details of which are provided below.
+
+
+### General Properties
+
+| Key             | Type   | Description                                                                      |
+| --------------- | ------ | -------------------------------------------------------------------------------- |
+| `"version"`     | number | Describes which version of the data structure is used (The current version is 1) |
+| `"name"`        | string | Name of the game mode                                                            |
+| `"description"` | string | Provides additional explanation about the game mode                              |
+
+
+### Team Performance Provider
+
+It is possible to use a custom scoring system. This is done giving a number provider under the `"performanceMetric"` key. This provider is used to calculate a team's performance during a game. Important to note is that a _lower performance metric value corresponds to a team performing better_. The context that is used to evaluate this provider exposes information about the team in question through a set of variables. These are:
+
+| Variable Name        | Variable Type | Description                                         |
+| -------------------- | ------------- | --------------------------------------------------- |
+| `"team.name"`        | string        | The team's name                                     |
+| `"team.size"`        | number        | Number of team members                              |
+| `"team.points"`      | number        | The total number of points that the team has scored |
+| `"team.memberNames"` | string array  | Array containing the names of all team members      |
+
+If not specified, teams with more points are considered to be performing better.
+
+
+## Settings
+
+_Settings_ allow users to further customize a gamemode before playing. These settings are specified as an array of _setting objects_, under the `"settings"` key. Each setting object must specify at least these fields:
+
+| Key             | Type                         | Description                                                                                                     | Required |
+| --------------- | ---------------------------- | --------------------------------------------------------------------------------------------------------------- | -------- |
+| `"type"`        | string                       | Data type of the setting, e.g. `"number"` or `"string array"`. The full list of allowed types is given below.   | ✅        |
+| `"name"`        | string                       | Name of the setting. The setting's value will be available through variable providers under `"settings.<name>"` | ✅        |
+| `"description"` | string                       | Short description of the setting, i.e. what it represents, or how it will be used                               | ❌        |
+| `"interface"`   | string                       | Describes how the user can adjust the setting, allowed values are dependent on the setting's type               | ✅        |
+| `"default"`     | determined by `"type"` field | Default or initial value of the setting                                                                         | ✅        |
+
+A setting's `"interface"` field determines how a user can adjust its value. Some interfaces are type-specific, may impose additional limits on certain fields, and/or require additional fields to be specified on the setting object.
+
+### String Setting Interfaces
+
+String-type settings allow for the following interfaces:
+1. `"input"` - The user is provided with a plain text input field.
+   - A string `"placeholder"` field may be specified, which is shown when the input field is empty.
+   - A number `"maxLength"` field may be specified, to indicate the maximum length of the input value.
+2. `"select"` - The user can select from a set of predefined values.
+   - Values are provided as an array of object under the `"values"` key. These objects must specify string `"value"` and `"name"` fields, for its value and display name respectively.
+   - The `"default"` field's value must be equal to one of the option's value.
+   - Example:
+        ```json
+        {
+            "type": "string",
+            "interface": "select",
+            "values": [
+                { "value": "string1", "name": "One" },
+                { "value": "string2", "name": "Two" },
+                { "value": "string3", "name": "Three" }
+            ],
+            "default": "string1",
+            ...
+        }
+        ```
+
+### Number Setting Interfaces
+
+Number-type settings allow for the following interfaces:
+1. `"input"` - The user is provided with a simple number input field.
+   - A number `"min"` field may be specified, to indicate the smallest allowed input value. If used, the default value must be greater than or equal to the minimum value.
+   - A number `"max"` field may be specified, to indicate the largest allowed input value. If used, the default value must be less than or equal to the maximum value.
+   - A number `"step"` field may be specified, to indicate the difference between allowed input values. If used, the default value is rounded to the nearest step.
+2. `"select"` - The user can select from a set of predefined values.
+   - Values are provided as an array of object under the `"values"` key. These objects must specify number `"value"` field and a string `"name"` field, for its value and display name respectively.
+   - The `"default"` field's value must be equal to one of the option's value.
+   - Example:
+        ```json
+        {
+            "type": "number",
+            "interface": "select",
+            "values": [
+                { "value": 15, "name": "15s" },
+                { "value": 30, "name": "30s" },
+                { "value": 60, "name": "60s" }
+            ],
+            "default": 30,
+            ...
+        }
+        ```
+
+### Boolean Setting Interfaces
+
+Number-type settings allow for the following interfaces:
+1. `"input"` - The user is provided with a checkbox input.
+
+### String Array Setting Interfaces
+
+String array-type settings allow for the following interfaces:
+1. `"csv"` - The user is provided with multiline text box. The array's elements are divided by commas.
+2. `"upload"` - The user is able to upload a CSV file containing the array's elements.

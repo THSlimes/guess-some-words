@@ -1,6 +1,6 @@
 import { NullaryProvider } from "./Provider";
 import { ALL_BINARY_PROVIDERS, ALL_NULLARY_PROVIDERS, ALL_TERNARY_PROVIDERS, ALL_UNARY_PROVIDERS } from "./standard-providers";
-import { DDValue, isDDValue } from "../types";
+import { DDValue, isDDValue, Type } from "../types";
 
 interface SerializedNullaryProvider {
     name: string
@@ -74,7 +74,9 @@ export function isSerializedProviderArg(v: unknown): v is SerializedProviderArg 
         || isSerializedTernaryProvider(v);
 }
 
-export function deserializeProvider(serialized: SerializedProviderArg): NullaryProvider<any> {
+export function deserializeProvider<T>(serialized: SerializedProviderArg, returnType: Type<T>): NullaryProvider<T>;
+export function deserializeProvider(serialized: SerializedProviderArg): NullaryProvider<any>;
+export function deserializeProvider(serialized: SerializedProviderArg, returnType?: Type<any>): NullaryProvider<any> {
     if (isDDValue(serialized)) return NullaryProvider.literal(serialized);
     else if (isSerializedTernaryProvider(serialized)) {
         const ternaryProviderCollection = ALL_TERNARY_PROVIDERS[serialized.name];
@@ -86,7 +88,10 @@ export function deserializeProvider(serialized: SerializedProviderArg): NullaryP
 
         const ternaryProvider = ternaryProviderCollection.findImpl(aProvider.returnType, bProvider.returnType, cProvider.returnType);
 
-        return new NullaryProvider(
+        if (returnType && !ternaryProvider.returnType.extends(returnType)) {
+            throw new TypeError(`invalid return type: expected ${returnType.name}, got ${ternaryProvider.returnType.name}`);
+        }
+        else return new NullaryProvider(
             ternaryProvider.returnType,
             ctx => ternaryProvider.apply(
                 ctx,
@@ -105,7 +110,10 @@ export function deserializeProvider(serialized: SerializedProviderArg): NullaryP
 
         const binaryProvider = binaryProviderCollection.findImpl(lhsProvider.returnType, rhsProvider.returnType);
 
-        return rhsProvider.chain(lhsProvider.chainLHS(binaryProvider));
+        if (returnType && !binaryProvider.returnType.extends(returnType)) {
+            throw new TypeError(`invalid return type: expected ${returnType.name}, got ${binaryProvider.returnType.name}`);
+        }
+        else return rhsProvider.chain(lhsProvider.chainLHS(binaryProvider));
     }
     else if (isSerializedUnaryProvider(serialized)) {
         const unaryProviderCollection = ALL_UNARY_PROVIDERS[serialized.name];
@@ -115,12 +123,18 @@ export function deserializeProvider(serialized: SerializedProviderArg): NullaryP
 
         const unaryProvider = unaryProviderCollection.findImpl(argProvider.returnType);
 
-        return argProvider.chain(unaryProvider);
+        if (returnType && !unaryProvider.returnType.extends(returnType)) {
+            throw new TypeError(`invalid return type: expected ${returnType.name}, got ${unaryProvider.returnType.name}`);
+        }
+        else return argProvider.chain(unaryProvider);
     }
     else {
         const nullaryProvider = ALL_NULLARY_PROVIDERS[serialized.name];
         if (!nullaryProvider) throw new ReferenceError(`no nullary provider with name "${serialized.name}" exists`);
 
-        return nullaryProvider;
+        if (returnType && !nullaryProvider.returnType.extends(returnType)) {
+            throw new TypeError(`invalid return type: expected ${returnType.name}, got ${nullaryProvider.returnType.name}`);
+        }
+        else return nullaryProvider;
     };
 }

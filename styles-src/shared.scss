@@ -2,11 +2,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Didact+Gothic&family=Reem+Kufi:wght@400..700&display=swap');
 
 :root {
-    --big-space: 1rem;
-    --small-space: .5rem;
     --tiny-space: .25rem;
+    --small-space: .5rem;
+    --big-space: 1rem;
 
     --rounding: var(--small-space);
+
+    --shadow: rgb(0 0 0 / .15);
 }
 
 html {
@@ -80,6 +82,7 @@ header {
         >button {
             width: 2.5rem;
             height: 2.5rem;
+            box-shadow: none;
 
             background: none;
         }
@@ -123,15 +126,26 @@ a {
     color: var(--text);
 }
 
+a {
+    text-decoration: none;
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
 button,
 input[type=button] {
+    @extend .interactable;
+
     display: flex;
     justify-content: center;
     align-items: center;
 
-    padding: var(--tiny-space);
+    padding: var(--small-space) var(--big-space);
+    gap: var(--small-space);
 
-    background-color: var(--tertiary);
+    background-color: var(--accent);
+    color: var(--text);
 
     border: 0px;
     border-radius: var(--rounding);
@@ -141,11 +155,17 @@ input[type=button] {
 
     &:hover {
         scale: 1.1;
+
+        &.link>h3 {
+            text-decoration: 2px underline;
+
+        }
     }
 
     &:active {
         scale: 1;
     }
+
 }
 
 div {
@@ -162,32 +182,35 @@ div.hr {
 
 svg.icon {
     pointer-events: none;
-    width: 2.5rem;
-    height: 2.5rem;
     flex-shrink: 0;
+    overflow: visible;
 }
 
-div#content {
+.content {
     padding: var(--big-space);
+    gap: var(--big-space);
 
     box-sizing: border-box;
     width: 100%;
     height: 100%;
     flex-grow: 1;
-
-    >div {
-        padding: var(--big-space);
-
-        box-sizing: border-box;
-        width: 100%;
-        height: 100%;
-        flex-grow: 1;
-
-        background-color: var(--primary);
-
-    }
 }
 
+.panel {
+    padding: var(--big-space);
+    gap: var(--small-space);
+
+    box-sizing: border-box;
+    width: 100%;
+    // height: 100%;
+    flex-grow: 1;
+
+    background-color: var(--primary);
+
+    >h1 {
+        text-align: center;
+    }
+}
 
 
 // Utility Classes
@@ -209,10 +232,47 @@ div#content {
         &.reverse {
             flex-direction: row-reverse;
         }
+
+    }
+
+    &.center {
+        justify-content: center;
+        align-items: center;
+    }
+
+    &.tiny-gap {
+        gap: var(--tiny-space);
+    }
+
+    &.small-gap {
+        gap: var(--small-space);
+    }
+
+    &.big-gap {
+        gap: var(--big-space);
     }
 
 }
 
+
+.drop-shadow {
+    &:is(h1, h2, h3, h4, h5, h6, p, label, span) {
+        // apply text-shadow to text element
+        text-shadow: 0px var(--tiny-space) 1px var(--shadow);
+    }
+
+    &:not(h1, h2, h3, h4, h5, h6, p, label, span) {
+        // apply box-shadow to non-text elements
+        box-shadow: 0px var(--tiny-space) 1px 0px var(--shadow);
+    }
+}
+
+.interactable {
+    box-shadow:
+        0px var(--tiny-space) 1px 0px var(--shadow),
+        inset 0px 0px 1px 2px var(--shadow),
+        inset 0 0 0 2px color-mix(in srgb, var(--accent) 97.5%, black);
+}
 
 
 // Responsive Design
