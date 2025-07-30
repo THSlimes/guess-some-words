@@ -1,21 +1,21 @@
 import SharedConstants from "../common/SharedConstants";
-import GameMode from "../common/engine/game-modes/GameMode";
-import SerializedGameMode from "../common/engine/game-modes/SerializedGameMode";
-import deserializeGameMode from "../common/engine/game-modes/deserialize-gamemode";
+import Gamemode from "../common/engine/gamemodes/Gamemode";
+import SerializedGamemode from "../common/engine/gamemodes/SerializedGamemode";
+import deserializeGamemode from "../common/engine/gamemodes/deserialize-gamemode";
 import "../common/ui/Responsive";
 import "../common/ui/header-footer";
 
 // load gamemode
 
-function loadGameMode(): GameMode {
+function loadGamemode(): Gamemode {
     try {
         const value = sessionStorage.getItem(SharedConstants.GAME_MODE_SESSION_STORAGE_KEY);
-        if (value === null) throw new Error("no game mode was relayed");
+        if (value === null) throw new Error("no gamemode was relayed");
 
         const obj = JSON.parse(value);
-        if (!SerializedGameMode.is(obj)) throw new TypeError("invalid game mode was relayed");
+        if (!SerializedGamemode.is(obj)) throw new TypeError("invalid gamemode was relayed");
 
-        return deserializeGameMode(obj);
+        return deserializeGamemode(obj);
     }
     catch (e) {
         location.replace('/');
@@ -23,4 +23,4 @@ function loadGameMode(): GameMode {
     }
 }
 
-const GAME_MODE = loadGameMode();
+const GAME_MODE = loadGamemode();

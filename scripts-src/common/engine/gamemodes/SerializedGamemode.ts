@@ -47,18 +47,18 @@ namespace SerializedGameModeV1 {
 
 type SerializedGameModeVLatest = SerializedGameModeV1;
 
-type SerializedGameMode = SerializedGameModeV1;
+type SerializedGamemode = SerializedGameModeV1;
 // SerializedGameModeV1 |
 // SerializedGameModeV2 |
 // SerializedGameModeV3;
-namespace SerializedGameMode {
-    export function is(v: unknown): v is SerializedGameMode {
+namespace SerializedGamemode {
+    export function is(v: unknown): v is SerializedGamemode {
         return SerializedGameModeV1.is(v)
         // || SerializedGameModeV2.is(v)
         // || SerializedGameModeV3.is(v);
     }
 
-    export function upgradeToLatest(gm: SerializedGameMode): SerializedGameModeVLatest {
+    export function upgradeToLatest(gm: SerializedGamemode): SerializedGameModeVLatest {
         switch (gm.version) {
             case 1:
                 return gm;
@@ -72,4 +72,4 @@ namespace SerializedGameMode {
     }
 }
 
-export default SerializedGameMode;
+export default SerializedGamemode;

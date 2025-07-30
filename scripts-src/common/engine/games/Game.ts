@@ -1,14 +1,14 @@
-import GameMode from "../game-modes/GameMode";
+import Gamemode from "../gamemodes/Gamemode";
 import { ProviderContext } from "../providers/Provider";
 import { Team } from "./Team";
 
 export default class Game {
 
-    private readonly gameMode: GameMode;
+    private readonly gameMode: Gamemode;
     public readonly teams: Team[];
     private turnCount = 0;
 
-    public constructor(gameMode: GameMode, teams: Team[]) {
+    public constructor(gameMode: Gamemode, teams: Team[]) {
         this.gameMode = gameMode;
         this.teams = teams;
     }

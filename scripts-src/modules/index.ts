@@ -1,5 +1,5 @@
 import SharedConstants from "../common/SharedConstants";
-import SerializedGameMode from "../common/engine/game-modes/SerializedGameMode";
+import SerializedGamemode from "../common/engine/gamemodes/SerializedGamemode";
 import Loading from "../common/ui/Loading";
 import Placeholder from "../common/ui/Placeholder";
 import "../common/ui/Responsive";
@@ -14,11 +14,11 @@ let gameModeButtons: HTMLButtonElement[] = [];
 Loading.onceDOMContentLoaded()
     .then(() => {
         gameModeButtons.push(
-            // preset game modes menu
+            // preset gamemodes menu
             Placeholder.replaceWith("classic-mode-button", BUTTON.apply({
                 dictKey: "index.presets.classic",
                 icon: "play-circle",
-                onClick: () => loadGameMode(fetchGameMode("./game-modes/classic.json"))
+                onClick: () => loadGamemode(fetchGamemode("./gamemodes/classic.json"))
             })),
             Placeholder.replaceWith("speedrun-mode-button", BUTTON.apply({
                 dictKey: "index.presets.speedrun",
@@ -30,8 +30,8 @@ Loading.onceDOMContentLoaded()
             })),
 
 
-            // preset game modes menu
-            Placeholder.replaceWith("upload-game-mode-button", BUTTON.apply({
+            // preset gamemodes menu
+            Placeholder.replaceWith("upload-gamemode-button", BUTTON.apply({
                 dictKey: "index.custom.upload",
                 icon: "upload"
             }))
@@ -44,7 +44,7 @@ Loading.onceDOMContentLoaded()
         }));
     });
 
-function fetchGameMode(src: string | URL): Promise<SerializedGameMode> {
+function fetchGamemode(src: string | URL): Promise<SerializedGamemode> {
     gameModeButtons.forEach(e => e.disabled = true);
 
     return fetch(src)
@@ -52,8 +52,8 @@ function fetchGameMode(src: string | URL): Promise<SerializedGameMode> {
         .then(obj => {
             console.log(obj);
 
-            if (SerializedGameMode.is(obj)) return obj;
-            else throw new TypeError("invalid serialized game mode");
+            if (SerializedGamemode.is(obj)) return obj;
+            else throw new TypeError("invalid serialized gamemode");
         })
         .catch(err => {
             gameModeButtons.forEach(e => e.disabled = false);
@@ -61,7 +61,7 @@ function fetchGameMode(src: string | URL): Promise<SerializedGameMode> {
         });
 }
 
-function loadGameMode(fetcher: Promise<SerializedGameMode>): Promise<void> {
+function loadGamemode(fetcher: Promise<SerializedGamemode>): Promise<void> {
     return fetcher.then(gameMode => {
         sessionStorage.setItem(SharedConstants.GAME_MODE_SESSION_STORAGE_KEY, JSON.stringify(gameMode));
         location.assign("./play.html");

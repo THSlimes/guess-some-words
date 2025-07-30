@@ -1,7 +1,7 @@
 import { Team } from "../games/Team";
 import { NullaryProvider, ProviderContext } from "../providers/Provider";
 
-class GameMode {
+class Gamemode {
 
     public static readonly TEAM_NAME_VARNAME = "team.name";
     public static readonly TEAM_SIZE_VARNAME = "team.size";
@@ -14,7 +14,7 @@ class GameMode {
 
     public readonly performanceMetric: NullaryProvider<number>;
 
-    public constructor(init: GameMode.Init) {
+    public constructor(init: Gamemode.Init) {
         this.name = init.name;
         this.description = init.description;
         this.performanceMetric = init.performanceMetric;
@@ -29,17 +29,17 @@ class GameMode {
     public calculatePerformance(team: Team, ctx?: ProviderContext): number {
         ctx = ctx ? ctx.copy() : new ProviderContext();
 
-        ctx.setStringVar(GameMode.TEAM_NAME_VARNAME, team.name);
-        ctx.setNumberVar(GameMode.TEAM_SIZE_VARNAME, team.size);
-        ctx.setNumberVar(GameMode.TEAM_POINTS_VARNAME, team.points);
-        ctx.setStringArrayVar(GameMode.TEAM_MEMBER_NAMES_VARNAME, team.members.map(p => p.name));
+        ctx.setStringVar(Gamemode.TEAM_NAME_VARNAME, team.name);
+        ctx.setNumberVar(Gamemode.TEAM_SIZE_VARNAME, team.size);
+        ctx.setNumberVar(Gamemode.TEAM_POINTS_VARNAME, team.points);
+        ctx.setStringArrayVar(Gamemode.TEAM_MEMBER_NAMES_VARNAME, team.members.map(p => p.name));
 
         return this.performanceMetric.apply(ctx);
     }
 
 }
 
-namespace GameMode {
+namespace Gamemode {
 
     export interface Init {
         name: string,
@@ -49,4 +49,4 @@ namespace GameMode {
 
 }
 
-export default GameMode;
+export default Gamemode;

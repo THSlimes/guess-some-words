@@ -313,7 +313,7 @@ TODO: write section about games
 
 ## Game Modes
 
-A _game mode_ is a configuration which determines the behavior and flow of a _game_. Guess Some Words allows for the customization of games using user-defined game modes. Such custom game modes are provided using a specific JSON format the details of which are provided below.
+A _gamemode_ is a configuration which determines the behavior and flow of a _game_. Guess Some Words allows for the customization of games using user-defined gamemodes. Such custom gamemodes are provided using a specific JSON format the details of which are provided below.
 
 
 ### General Properties
@@ -321,8 +321,8 @@ A _game mode_ is a configuration which determines the behavior and flow of a _ga
 | Key             | Type   | Description                                                                      |
 | --------------- | ------ | -------------------------------------------------------------------------------- |
 | `"version"`     | number | Describes which version of the data structure is used (The current version is 1) |
-| `"name"`        | string | Name of the game mode                                                            |
-| `"description"` | string | Provides additional explanation about the game mode                              |
+| `"name"`        | string | Name of the gamemode                                                            |
+| `"description"` | string | Provides additional explanation about the gamemode                              |
 
 
 ### Team Performance Provider
