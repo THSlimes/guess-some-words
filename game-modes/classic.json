@@ -1,5 +1,5 @@
 {
     "version": 1,
-    "title": "Example Gamemode",
+    "name": "Example Gamemode",
     "description": "This is an example game mode."
 }

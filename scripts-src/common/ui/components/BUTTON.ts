@@ -13,9 +13,7 @@ type ButtonCtx =
 
 export const BUTTON = AssemblyLine.fromTagName<"button", ButtonCtx>("button", { text: "button", icon: "add-person", onClick: () => { } })
     .children(
-        (_, ctx) => {
-            console.log(ctx);
-            
+        (_, ctx) => {            
             if ("dictKey" in ctx) {
                 const out = document.createElement("h3");
                 Language.MANAGER_PROMISE.then(manager => manager.registerTextContent(ctx.dictKey, new ProviderContext(), out));

@@ -128,6 +128,7 @@ a {
 
 a {
     text-decoration: none;
+
     &:hover {
         text-decoration: underline;
     }
@@ -153,17 +154,23 @@ input[type=button] {
     scale: 1;
     transition: scale 150ms cubic-bezier(0, 1, .75, 1.5);
 
-    &:hover {
-        scale: 1.1;
-
-        &.link>h3 {
-            text-decoration: 2px underline;
-
-        }
+    &:disabled {
+        filter: saturate(0) brightness(1.2);
     }
 
-    &:active {
-        scale: 1;
+    &:not(:disabled) {
+        &:hover {
+            scale: 1.1;
+
+            &.link>h3 {
+                text-decoration: 2px underline;
+
+            }
+        }
+
+        &:active {
+            scale: 1;
+        }
     }
 
 }
